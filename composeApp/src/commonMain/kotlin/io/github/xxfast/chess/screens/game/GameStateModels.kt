@@ -72,13 +72,13 @@ data class GameState(
   val board: Grid<Piece?> = Standard,
 )
 
-val Standard: List<List<Piece?>> = List(8) { y ->
+val Standard: Grid<Piece?> = List(8) { y ->
   List(8) { x ->
     when (y) {
-      1 -> BP
-      6 -> WP
-      0 -> listOf(BR, BN, BB, BQ, BK, BB, BN, BR)[x]
-      7 -> listOf(WR, WN, WB, WQ, WK, WB, WN, WR)[x]
+      0 -> listOf(WR, WN, WB, WQ, WK, WB, WN, WR)[x]
+      1 -> WP
+      6 -> BP
+      7 -> listOf(BR, BN, BB, BQ, BK, BB, BN, BR)[x]
       else -> null
     }
   }

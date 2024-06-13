@@ -3,7 +3,6 @@ package io.github.xxfast.chess.screens.game
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -24,7 +23,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+const val DEBUG = true
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameView(
   state: GameState = GameState(),
@@ -62,7 +63,8 @@ fun GameBoard(
     val cellSize: Dp = min(this.maxWidth, this.maxHeight) / maxSize
 
     Column {
-      state.board.forEachIndexed { y, row ->
+      // TODO: Flip the board so that the player's perspective is always from the bottom
+      state.board.reversed().forEachIndexed { y, row ->
         Row {
           row.forEachIndexed { x, piece ->
             val isEvenRow = y % 2 == 0
@@ -81,6 +83,17 @@ fun GameBoard(
                 modifier = Modifier
                   .padding(4.dp),
               )
+
+              if (DEBUG) {
+                val coordinateX = "abcdefgh"[x]
+                val coordinateY = y + 1
+                Text(
+                  text = "$coordinateX$coordinateY",
+                  modifier = Modifier.padding(2.dp),
+                  color = MaterialTheme.colorScheme.primary,
+                  style = MaterialTheme.typography.bodySmall,
+                )
+              }
             }
           }
 
