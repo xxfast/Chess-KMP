@@ -108,7 +108,7 @@ fun GameBoard(
           Row {
             row.forEachIndexed { x, piece ->
               val y = state.board.maxHeight - 1 - fy
-              val isEvenRow = y % 2 == 0
+              val isEvenRow = fy % 2 == 0
               val isEvenColumn = x % 2 == 0
               val coordinate: Coordinate = x to y
 
