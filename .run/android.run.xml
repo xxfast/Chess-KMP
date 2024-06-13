@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="composeApp" type="AndroidRunConfigurationType" factoryName="Android App">
+  <configuration default="false" name="android" type="AndroidRunConfigurationType" factoryName="Android App">
     <module name="Chess-KMP.composeApp.main" />
     <option name="DEPLOY" value="true" />
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
