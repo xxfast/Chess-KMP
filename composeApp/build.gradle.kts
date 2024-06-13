@@ -51,15 +51,20 @@ kotlin {
       implementation(libs.androidx.activity.compose)
       implementation(libs.google.android.material)
     }
+
     commonMain.dependencies {
+      implementation(projects.shared)
+
       implementation(compose.runtime)
       implementation(compose.foundation)
       implementation(compose.material3)
       implementation(compose.ui)
       implementation(compose.components.resources)
       implementation(compose.components.uiToolingPreview)
-      implementation(projects.shared)
+
+      implementation(libs.compose.dnd)
     }
+
     desktopMain.dependencies {
       implementation(compose.desktop.currentOs)
     }

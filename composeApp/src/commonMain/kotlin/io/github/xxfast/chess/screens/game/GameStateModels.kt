@@ -68,6 +68,11 @@ val Piece.icon: ImageVector
 
 typealias Grid<T> = List<List<T?>>
 
+typealias Coordinate = Pair<Int, Int>
+
+val Coordinate.x: Int get() = first
+val Coordinate.y: Int get() = second
+
 data class GameState(
   val board: Grid<Piece?> = Standard,
 )

@@ -22,6 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import com.mohamedrejeb.compose.dnd.DragAndDropContainer
+import com.mohamedrejeb.compose.dnd.DragAndDropState
+import com.mohamedrejeb.compose.dnd.drag.DraggableItem
+import com.mohamedrejeb.compose.dnd.drop.dropTarget
+import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
 
 const val DEBUG = true
 
@@ -29,6 +34,7 @@ const val DEBUG = true
 @Composable
 fun GameView(
   state: GameState = GameState(),
+  onMove: (Piece, Coordinate) -> Unit,
 ) {
   Scaffold(
     topBar = {
@@ -44,6 +50,7 @@ fun GameView(
   ) { scaffoldPadding ->
     GameBoard(
       state = state,
+      onMove = onMove,
       modifier = Modifier
         .padding(scaffoldPadding)
         .fillMaxSize()
@@ -54,49 +61,67 @@ fun GameView(
 @Composable
 fun GameBoard(
   state: GameState,
+  onMove: (Piece, Coordinate) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  BoxWithConstraints(modifier) {
-    val maxWidth = state.board.maxOf { it.size }
-    val maxHeight = state.board.size
-    val maxSize: Int = maxOf(maxWidth, maxHeight)
-    val cellSize: Dp = min(this.maxWidth, this.maxHeight) / maxSize
+  val dragAndDropState: DragAndDropState<Piece> = rememberDragAndDropState()
 
-    Column {
-      // TODO: Flip the board so that the player's perspective is always from the bottom
-      state.board.reversed().forEachIndexed { y, row ->
-        Row {
-          row.forEachIndexed { x, piece ->
-            val isEvenRow = y % 2 == 0
-            val isEvenColumn = x % 2 == 0
-            Surface(
-              color =
-              if (isEvenRow xor isEvenColumn) MaterialTheme.colorScheme.primaryContainer
-              else MaterialTheme.colorScheme.surface,
-              shape = MaterialTheme.shapes.small,
-              modifier = Modifier
-                .size(cellSize)
-            ) {
-              if (piece != null) Image(
-                imageVector = piece.icon,
-                contentDescription = null,
+  DragAndDropContainer(state = dragAndDropState) {
+    BoxWithConstraints(modifier) {
+      val maxWidth = state.board.maxOf { it.size }
+      val maxHeight = state.board.size
+      val maxSize: Int = maxOf(maxWidth, maxHeight)
+      val cellSize: Dp = min(this.maxWidth, this.maxHeight) / maxSize
+
+      Column {
+        // TODO: Flip the board so that the player's perspective is always from the bottom
+        state.board.reversed().forEachIndexed { y, row ->
+          Row {
+            row.forEachIndexed { x, piece ->
+              val isEvenRow = y % 2 == 0
+              val isEvenColumn = x % 2 == 0
+              val coordinate: Coordinate = x to y
+
+              Surface(
+                color =
+                if (isEvenRow xor isEvenColumn) MaterialTheme.colorScheme.primaryContainer
+                else MaterialTheme.colorScheme.surface,
+                shape = MaterialTheme.shapes.small,
                 modifier = Modifier
-                  .padding(4.dp),
-              )
+                  .size(cellSize)
+                  .dropTarget(
+                    state = dragAndDropState,
+                    key = coordinate,
+                    onDrop = { state -> onMove(state.data, x to y) }
+                  )
+              ) {
+                if (piece != null) DraggableItem(
+                  state = dragAndDropState,
+                  key = piece.name to coordinate,
+                  data = piece,
+                ) {
+                  if(!isDragging) Image(
+                    imageVector = piece.icon,
+                    contentDescription = null,
+                    modifier = Modifier
+                      .padding(4.dp),
+                  )
+                }
 
-              if (DEBUG) {
-                val coordinateX = "abcdefgh"[x]
-                val coordinateY = y + 1
-                Text(
-                  text = "$coordinateX$coordinateY",
-                  modifier = Modifier.padding(2.dp),
-                  color = MaterialTheme.colorScheme.primary,
-                  style = MaterialTheme.typography.bodySmall,
-                )
+                if (DEBUG) {
+                  val coordinateX = "abcdefgh"[x]
+                  val coordinateY = y + 1
+                  Text(
+                    text = "$coordinateX$coordinateY",
+                    modifier = Modifier.padding(2.dp),
+                    color = MaterialTheme.colorScheme.outline,
+                    style = MaterialTheme.typography.bodySmall,
+                  )
+                }
               }
             }
-          }
 
+          }
         }
       }
     }

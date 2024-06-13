@@ -18,7 +18,10 @@ import io.github.xxfast.chess.resources.ChessTheme
 fun GameBoardPreview() {
   ChessTheme {
     Surface {
-      GameBoard(state = GameState())
+      GameBoard(
+        state = GameState(),
+        onMove = { _, _ -> }
+      )
     }
   }
 }
