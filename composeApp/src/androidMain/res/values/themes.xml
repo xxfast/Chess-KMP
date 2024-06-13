@@ -1,0 +1,17 @@
+<resources>
+  <!-- Base application theme. -->
+  <style name="Theme.Chess" parent="Theme.Material3.DynamicColors.DayNight">
+    <!-- Status bar color. -->
+    <item name="android:statusBarColor" >@android:color/transparent</item>
+    <item name="android:navigationBarColor" >@android:color/transparent</item>
+    <!-- Customize your theme here. -->
+  </style>
+
+  <style name="Theme.Chess.NoActionBar">
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+  </style>
+
+  <style name="Theme.Chess.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+  <style name="Theme.Chess.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>
