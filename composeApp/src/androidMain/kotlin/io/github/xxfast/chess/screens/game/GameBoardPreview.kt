@@ -20,7 +20,7 @@ fun GameBoardPreview() {
     Surface {
       GameBoard(
         state = GameState(),
-        onMove = { _, _ -> }
+        onMove = { _, _, _ -> }
       )
     }
   }

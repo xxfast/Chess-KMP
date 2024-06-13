@@ -18,6 +18,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -30,11 +34,38 @@ import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
 
 const val DEBUG = true
 
+@Composable
+fun GameScreen() {
+  var state: GameState by remember { mutableStateOf(GameState()) }
+
+  GameView(
+    state = state,
+    onMove = { piece, from, to ->
+      state = state.copy(
+        board = state.board.mapIndexed { y, row ->
+          row.mapIndexed { x, cell ->
+            when {
+              // Move the piece
+              x to y == to -> piece
+
+              // Clear the cell
+              x to y == from -> null
+
+              // Or do nothing
+              else -> cell
+            }
+          }
+        }
+      )
+    }
+  )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameView(
-  state: GameState = GameState(),
-  onMove: (Piece, Coordinate) -> Unit,
+  state: GameState,
+  onMove: (Piece, from: Coordinate, to: Coordinate) -> Unit,
 ) {
   Scaffold(
     topBar = {
@@ -61,23 +92,22 @@ fun GameView(
 @Composable
 fun GameBoard(
   state: GameState,
-  onMove: (Piece, Coordinate) -> Unit,
+  onMove: (Piece, from: Coordinate, to: Coordinate) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val dragAndDropState: DragAndDropState<Piece> = rememberDragAndDropState()
+  val dragAndDropState: DragAndDropState<Cell> = rememberDragAndDropState()
 
   DragAndDropContainer(state = dragAndDropState) {
     BoxWithConstraints(modifier) {
-      val maxWidth = state.board.maxOf { it.size }
-      val maxHeight = state.board.size
-      val maxSize: Int = maxOf(maxWidth, maxHeight)
+      val maxSize: Int = maxOf(state.board.maxWidth, state.board.maxHeight)
       val cellSize: Dp = min(this.maxWidth, this.maxHeight) / maxSize
 
       Column {
         // TODO: Flip the board so that the player's perspective is always from the bottom
-        state.board.reversed().forEachIndexed { y, row ->
+        state.board.reversed().forEachIndexed { fy, row ->
           Row {
             row.forEachIndexed { x, piece ->
+              val y = state.board.maxHeight - 1 - fy
               val isEvenRow = y % 2 == 0
               val isEvenColumn = x % 2 == 0
               val coordinate: Coordinate = x to y
@@ -92,27 +122,31 @@ fun GameBoard(
                   .dropTarget(
                     state = dragAndDropState,
                     key = coordinate,
-                    onDrop = { state -> onMove(state.data, x to y) }
+                    onDrop = { state ->
+                      onMove(state.data.piece, state.data.coordinate, coordinate)
+                    }
                   )
               ) {
-                if (piece != null) DraggableItem(
-                  state = dragAndDropState,
-                  key = piece.name to coordinate,
-                  data = piece,
-                ) {
-                  if(!isDragging) Image(
-                    imageVector = piece.icon,
-                    contentDescription = null,
-                    modifier = Modifier
-                      .padding(4.dp),
-                  )
+                if (piece != null) {
+                  val cell = Cell(coordinate, piece)
+
+                  DraggableItem(
+                    state = dragAndDropState,
+                    key = cell,
+                    data = cell,
+                  ) {
+                    if (!isDragging) Image(
+                      imageVector = piece.icon,
+                      contentDescription = null,
+                      modifier = Modifier
+                        .padding(4.dp),
+                    )
+                  }
                 }
 
                 if (DEBUG) {
-                  val coordinateX = "abcdefgh"[x]
-                  val coordinateY = y + 1
                   Text(
-                    text = "$coordinateX$coordinateY",
+                    text = coordinate.text,
                     modifier = Modifier.padding(2.dp),
                     color = MaterialTheme.colorScheme.outline,
                     style = MaterialTheme.typography.bodySmall,

@@ -67,11 +67,22 @@ val Piece.icon: ImageVector
     }
 
 typealias Grid<T> = List<List<T?>>
+val <T> Grid<T>.maxWidth: Int get() = maxOf { it.size }
+val <T> Grid<T>.maxHeight: Int get() = size
 
 typealias Coordinate = Pair<Int, Int>
-
 val Coordinate.x: Int get() = first
 val Coordinate.y: Int get() = second
+val Coordinate.text: String get() {
+  val coordinateX = "abcdefgh"[x]
+  val coordinateY = y + 1
+  return "$coordinateX$coordinateY"
+}
+
+data class Cell(
+  val coordinate: Coordinate,
+  val piece: Piece
+)
 
 data class GameState(
   val board: Grid<Piece?> = Standard,
