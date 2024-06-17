@@ -17,85 +17,50 @@ import io.github.xxfast.chess.resources.pieces.pieces.regular.Wn
 import io.github.xxfast.chess.resources.pieces.pieces.regular.Wp
 import io.github.xxfast.chess.resources.pieces.pieces.regular.Wq
 import io.github.xxfast.chess.resources.pieces.pieces.regular.Wr
-import io.github.xxfast.chess.screens.game.Piece.BB
-import io.github.xxfast.chess.screens.game.Piece.BK
-import io.github.xxfast.chess.screens.game.Piece.BN
-import io.github.xxfast.chess.screens.game.Piece.BP
-import io.github.xxfast.chess.screens.game.Piece.BQ
-import io.github.xxfast.chess.screens.game.Piece.BR
-import io.github.xxfast.chess.screens.game.Piece.WB
-import io.github.xxfast.chess.screens.game.Piece.WK
-import io.github.xxfast.chess.screens.game.Piece.WN
-import io.github.xxfast.chess.screens.game.Piece.WP
-import io.github.xxfast.chess.screens.game.Piece.WQ
-import io.github.xxfast.chess.screens.game.Piece.WR
-
-enum class Piece {
-  WP, WN, WB, WR, WQ, WK,
-  BP, BN, BB, BR, BQ, BK,
-}
+import io.github.xxfast.chess.screens.game.PieceColor.Black
+import io.github.xxfast.chess.screens.game.PieceColor.White
+import io.github.xxfast.chess.screens.game.PieceType.Bishop
+import io.github.xxfast.chess.screens.game.PieceType.King
+import io.github.xxfast.chess.screens.game.PieceType.Knight
+import io.github.xxfast.chess.screens.game.PieceType.Pawn
+import io.github.xxfast.chess.screens.game.PieceType.Queen
+import io.github.xxfast.chess.screens.game.PieceType.Rook
 
 // TODO: Swapping the assets for dark theme for better consistancy
 val Piece.icon: ImageVector
   @Composable get() =
-    if (isSystemInDarkTheme()) when (this) {
-      WP -> Pieces.Regular.Bp
-      WN -> Pieces.Regular.Bn
-      WB -> Pieces.Regular.Bb
-      WR -> Pieces.Regular.Br
-      WQ -> Pieces.Regular.Bq
-      WK -> Pieces.Regular.Bk
-      BP -> Pieces.Regular.Wp
-      BN -> Pieces.Regular.Wn
-      BB -> Pieces.Regular.Wb
-      BR -> Pieces.Regular.Wr
-      BQ -> Pieces.Regular.Wq
-      BK -> Pieces.Regular.Wk
-    } else when (this) {
-      WP -> Pieces.Regular.Wp
-      WN -> Pieces.Regular.Wn
-      WB -> Pieces.Regular.Wb
-      WR -> Pieces.Regular.Wr
-      WQ -> Pieces.Regular.Wq
-      WK -> Pieces.Regular.Wk
-      BP -> Pieces.Regular.Bp
-      BN -> Pieces.Regular.Bn
-      BB -> Pieces.Regular.Bb
-      BR -> Pieces.Regular.Br
-      BQ -> Pieces.Regular.Bq
-      BK -> Pieces.Regular.Bk
+    if (isSystemInDarkTheme()) when {
+      this.type == Pawn && this.color == White -> Pieces.Regular.Bp
+      this.type == Knight && this.color == White -> Pieces.Regular.Bn
+      this.type == Bishop && this.color == White -> Pieces.Regular.Bb
+      this.type == Rook && this.color == White -> Pieces.Regular.Br
+      this.type == Queen && this.color == White -> Pieces.Regular.Bq
+      this.type == King && this.color == White -> Pieces.Regular.Bk
+      this.type == Pawn && this.color == Black -> Pieces.Regular.Wp
+      this.type == Knight && this.color == Black -> Pieces.Regular.Wn
+      this.type == Bishop && this.color == Black -> Pieces.Regular.Wb
+      this.type == Rook && this.color == Black -> Pieces.Regular.Wr
+      this.type == Queen && this.color == Black -> Pieces.Regular.Wq
+      this.type == King && this.color == Black -> Pieces.Regular.Wk
+      else -> error("Invalid piece $this")
+    } else when {
+      this.type == Pawn && this.color == White  -> Pieces.Regular.Wp
+      this.type == Knight && this.color == White  -> Pieces.Regular.Wn
+      this.type == Bishop && this.color == White  -> Pieces.Regular.Wb
+      this.type == Rook && this.color == White  -> Pieces.Regular.Wr
+      this.type == Queen && this.color == White  -> Pieces.Regular.Wq
+      this.type == King && this.color == White  -> Pieces.Regular.Wk
+      this.type == Pawn && this.color == Black  -> Pieces.Regular.Bp
+      this.type == Knight && this.color == Black  -> Pieces.Regular.Bn
+      this.type == Bishop && this.color == Black  -> Pieces.Regular.Bb
+      this.type == Rook && this.color == Black  -> Pieces.Regular.Br
+      this.type == Queen && this.color == Black  -> Pieces.Regular.Bq
+      this.type == King && this.color == Black  -> Pieces.Regular.Bk
+      else -> error("Invalid piece $this")
     }
-
-typealias Grid<T> = List<List<T?>>
-val <T> Grid<T>.maxWidth: Int get() = maxOf { it.size }
-val <T> Grid<T>.maxHeight: Int get() = size
-
-typealias Coordinate = Pair<Int, Int>
-val Coordinate.x: Int get() = first
-val Coordinate.y: Int get() = second
-val Coordinate.text: String get() {
-  val coordinateX = "abcdefgh"[x]
-  val coordinateY = y + 1
-  return "$coordinateX$coordinateY"
-}
-
-data class Cell(
-  val coordinate: Coordinate,
-  val piece: Piece
-)
 
 data class GameState(
-  val board: Grid<Piece?> = Standard,
+  val board: Board = Standard,
+  val turn: PieceColor = White,
+  val moves: List<Move> = legalMoves(board, turn)
 )
-
-val Standard: Grid<Piece?> = List(8) { y ->
-  List(8) { x ->
-    when (y) {
-      0 -> listOf(WR, WN, WB, WQ, WK, WB, WN, WR)[x]
-      1 -> WP
-      6 -> BP
-      7 -> listOf(BR, BN, BB, BQ, BK, BB, BN, BR)[x]
-      else -> null
-    }
-  }
-}
