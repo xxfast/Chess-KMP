@@ -1,16 +1,18 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
   alias(libs.plugins.kotlinMultiplatform)
   alias(libs.plugins.androidLibrary)
+  alias(libs.plugins.kotlinx.rpc)
+  alias(libs.plugins.ksp)
+  alias(libs.plugins.kotlinPluginSerialization)
 }
 
 kotlin {
-  @OptIn(ExperimentalWasmDsl::class)
-  wasmJs {
+
+  // TODO: Add back wasm after https://github.com/Kotlin/kotlinx-rpc/issues/95
+  js {
     browser {
       commonWebpackConfig {
         devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
@@ -35,7 +37,10 @@ kotlin {
 
   sourceSets {
     commonMain.dependencies {
-      // put your Multiplatform dependencies here
+      api(libs.kotlinx.coroutines.core)
+
+      implementation(libs.kotlinx.rpc.runtime)
+      implementation(libs.kotlinx.serialization.json)
     }
   }
 }

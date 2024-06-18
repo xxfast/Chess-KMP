@@ -1,6 +1,5 @@
 package io.github.xxfast.chess
 
-import Greeting
 import SERVER_PORT
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -21,15 +20,11 @@ fun Application.module() {
 
   routing {
     get("/") {
-      call.respondText("Ktor: ${Greeting().greet()}")
+      call.respondText("ChessKMP")
     }
 
     rpc("/game") {
-      rpcConfig {
-        serialization {
-          json()
-        }
-      }
+      rpcConfig { serialization { json() } }
     }
   }
 }

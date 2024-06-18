@@ -9,8 +9,9 @@ plugins {
 }
 
 kotlin {
-  @OptIn(ExperimentalWasmDsl::class)
-  wasmJs {
+
+  // TODO: Add back wasm after https://github.com/Kotlin/kotlinx-rpc/issues/95
+  js {
     moduleName = "composeApp"
     browser {
       commonWebpackConfig {
@@ -129,4 +130,8 @@ compose.desktop {
       packageVersion = "1.0.0"
     }
   }
+}
+
+compose.experimental {
+  web.application { }
 }
