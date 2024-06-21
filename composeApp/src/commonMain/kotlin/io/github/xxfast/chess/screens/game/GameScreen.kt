@@ -47,15 +47,13 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-const val DEBUG = true
-
 @Composable
 fun GameScreen() {
   var state: GameState by remember { mutableStateOf(GameState()) }
 
   GameView(
     state = state,
-    onMove = { move->
+    onMove = { move ->
       val turn: PieceColor = !state.turn
       val board: Board = state.board.move(move)
       val moves: List<Move> = legalMoves(board, turn)
@@ -137,12 +135,12 @@ fun GameBoard(
                     // clear the selection
                     selected = null
 
-                  // If not
+                    // If not
                   } else {
                     selected =
-                      // if there is a piece in this cell
+                        // if there is a piece in this cell
                       if (selection?.coordinate != coordinate && piece != null)
-                        // set the selection
+                      // set the selection
                         Cell(coordinate, piece)
                       // else clear the selection
                       else null
@@ -170,7 +168,11 @@ fun GameBoard(
               ) {
 
                 val distanceToPiece = selected?.coordinate
-                  ?.let { (sx, sy) -> sqrt((x - sx).toDouble().pow(2) + (y - sy).toDouble().pow(2)) }
+                  ?.let { (sx, sy) ->
+                    sqrt(
+                      (x - sx).toDouble().pow(2) + (y - sy).toDouble().pow(2)
+                    )
+                  }
                   ?.roundToInt()
                   ?: 0
 
@@ -215,14 +217,12 @@ fun GameBoard(
                   }
                 }
 
-                if (DEBUG) {
-                  Text(
-                    text = coordinate.text,
-                    modifier = Modifier.padding(2.dp),
-                    color = MaterialTheme.colorScheme.outline,
-                    style = MaterialTheme.typography.bodySmall,
-                  )
-                }
+                Text(
+                  text = coordinate.text,
+                  modifier = Modifier.padding(2.dp),
+                  color = MaterialTheme.colorScheme.outline,
+                  style = MaterialTheme.typography.bodySmall,
+                )
               }
             }
 

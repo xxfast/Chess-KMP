@@ -1,6 +1,8 @@
 package io.github.xxfast.chess
 
 import SERVER_PORT
+import io.github.xxfast.chess.discover.DiscoverApi
+import io.github.xxfast.chess.discover.DiscoverService
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -25,6 +27,11 @@ fun Application.module() {
 
     rpc("/game") {
       rpcConfig { serialization { json() } }
+    }
+
+    rpc("/discover") {
+      rpcConfig { serialization { json() } }
+      registerService<DiscoverApi> { DiscoverService(coroutineContext) }
     }
   }
 }

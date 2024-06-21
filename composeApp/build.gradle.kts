@@ -6,6 +6,7 @@ plugins {
   alias(libs.plugins.kotlinMultiplatform)
   alias(libs.plugins.androidApplication)
   alias(libs.plugins.compose.multiplatform)
+  alias(libs.plugins.kotlinx.rpc.platform)
 }
 
 kotlin {
@@ -41,6 +42,8 @@ kotlin {
     iosTarget.binaries.framework {
       baseName = "ComposeApp"
       isStatic = true
+
+      export(libs.decompose.router)
     }
   }
 
@@ -51,9 +54,12 @@ kotlin {
       implementation(compose.preview)
       implementation(libs.androidx.activity.compose)
       implementation(libs.google.android.material)
+      implementation(libs.ktor.client.okhttp)
     }
 
     commonMain.dependencies {
+      api(libs.decompose.router)
+
       implementation(projects.shared)
 
       implementation(compose.runtime)
@@ -64,10 +70,29 @@ kotlin {
       implementation(compose.components.uiToolingPreview)
 
       implementation(libs.compose.dnd)
+      implementation(libs.kotlinx.rpc.runtime.serialization.json)
+      implementation(libs.kotlinx.rpc.transport.ktor.client)
+      implementation(libs.ktor.client.contentnegotiation)
+      implementation(libs.ktor.client.core)
+      implementation(libs.ktor.client.serialization)
+      implementation(libs.ktor.client.logging)
+      implementation(libs.ktor.serialization.kotlinx.json)
+      implementation(libs.molecule.runtime)
+      implementation(libs.uuid)
     }
 
     desktopMain.dependencies {
       implementation(compose.desktop.currentOs)
+      implementation(libs.ktor.client.cio)
+      implementation(libs.kotlinx.coroutines.swing)
+    }
+
+    iosMain.dependencies {
+      implementation(libs.ktor.client.cio)
+    }
+
+    jsMain.dependencies {
+      implementation(libs.ktor.client.js)
     }
   }
 }
@@ -122,7 +147,7 @@ android {
 
 compose.desktop {
   application {
-    mainClass = "MainKt"
+    mainClass = "ApplicationKt"
 
     nativeDistributions {
       targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)

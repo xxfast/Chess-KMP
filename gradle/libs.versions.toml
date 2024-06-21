@@ -1,7 +1,7 @@
 [versions]
 agp = "8.2.0"
 android-compileSdk = "34"
-android-minSdk = "24"
+android-minSdk = "25"
 android-targetSdk = "34"
 androidx-activityCompose = "1.9.0"
 androidx-appcompat = "1.6.1"
@@ -12,9 +12,10 @@ androidx-material = "1.12.0"
 androidx-test-junit = "1.1.5"
 compose-multiplatform = "1.6.11"
 composeDnd = "0.2.0"
+decompose-router = "0.8.0"
 junit = "4.13.2"
 kotlin = "1.9.24"
-kotlinx-coroutines-core = "1.8.1"
+kotlinx-coroutines = "1.8.1"
 kotlinx-rpc = "0.1.0"
 kotlinx-serialization-json = "1.6.1"
 ksp = "1.9.24-1.0.20"
@@ -22,6 +23,9 @@ ktor = "2.3.11"
 logback = "1.5.6"
 material3 = "1.2.1"
 material-components = "1.12.0"
+molecule = "1.4.3"
+moleculeRuntime = "1.4.3"
+uuid = "0.8.4"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -33,12 +37,14 @@ androidx-material = { group = "com.google.android.material", name = "material", 
 androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
 compose-dnd = { module = "com.mohamedrejeb.dnd:compose-dnd", version.ref = "composeDnd" }
+decompose-router = { module = "io.github.xxfast:decompose-router", version.ref = "decompose-router" }
 google-android-material = { module = "com.google.android.material:material", version.ref = "material-components" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
-kotlinx-coroutines-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines-core" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-rpc-runtime = { module = "org.jetbrains.kotlinx:kotlinx-rpc-runtime" }
 kotlinx-rpc-runtime-client = { module = "org.jetbrains.kotlinx:kotlinx-rpc-runtime-client" }
 kotlinx-rpc-runtime-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-rpc-runtime-serialization-json" }
@@ -47,10 +53,12 @@ kotlinx-rpc-transport-ktor-client = { module = "org.jetbrains.kotlinx:kotlinx-rp
 kotlinx-rpc-transport-ktor-server = { module = "org.jetbrains.kotlinx:kotlinx-rpc-transport-ktor-server" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-contentnegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-websockets-js = { module = "io.ktor:ktor-client-websockets-js", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
@@ -62,6 +70,8 @@ ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref 
 ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
 ktor-server-websockets-jvm = { module = "io.ktor:ktor-server-websockets-jvm", version.ref = "ktor" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "moleculeRuntime" }
+uuid = { module = "com.benasher44:uuid", version.ref = "uuid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -74,3 +84,4 @@ kotlinx-rpc = { id = "org.jetbrains.kotlinx.rpc.plugin", version.ref = "kotlinx-
 kotlinx-rpc-platform = { id = "org.jetbrains.kotlinx.rpc.platform", version.ref = "kotlinx-rpc" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+molecule = { id = "app.cash.molecule", version.ref = "molecule" }
