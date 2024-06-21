@@ -1,18 +1,21 @@
 package io.github.xxfast.chess.screens.matchmake
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.benasher44.uuid.uuid4
+import io.github.xxfast.chess.ChessApplicationScope
 import io.github.xxfast.chess.api.HttpClient
 import io.github.xxfast.chess.discover.DiscoverApi
 import io.github.xxfast.chess.discover.Player
 import io.github.xxfast.chess.screens.matchmake.MatchMakingEvent.Join
 import io.github.xxfast.chess.screens.matchmake.MatchMakingEvent.Leave
 import io.github.xxfast.chess.screens.matchmake.MatchMakingEvent.Match
+import io.github.xxfast.chess.screens.settings.Loading
 import io.github.xxfast.chess.utils.Device
 import io.ktor.client.request.url
 import kotlinx.coroutines.Job
@@ -49,10 +52,10 @@ data class Server(
 )
 
 @Composable
-fun MatchMakingDomain(events: SharedFlow<MatchMakingEvent>): MatchMakingState {
+fun ChessApplicationScope.MatchMakingDomain(events: SharedFlow<MatchMakingEvent>): MatchMakingState {
   var server: Server? by remember { mutableStateOf(null) }
   var opponents: List<Player>? by remember { mutableStateOf(emptyList()) }
-  val player: Player by remember { mutableStateOf(UserPlayer) }
+  val player: Player? by userStore.updates.collectAsState(Loading)
 
   LaunchedEffect(server) {
     val address: Address = server?.address ?: return@LaunchedEffect
@@ -75,14 +78,15 @@ fun MatchMakingDomain(events: SharedFlow<MatchMakingEvent>): MatchMakingState {
     } while (server?.client == null)
   }
 
-  LaunchedEffect(server?.client) {
+  LaunchedEffect(server?.client, player) {
     val client: RPCClient = server?.client ?: return@LaunchedEffect
+    val user: Player = player ?: return@LaunchedEffect
     server = server?.copy(
       session = launch {
         streamScoped {
           client
             .withService<DiscoverApi>()
-            .discover(player)
+            .discover(user)
             .collect { players ->
               opponents = players
             }

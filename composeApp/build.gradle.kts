@@ -86,6 +86,7 @@ kotlin {
 
     desktopMain.dependencies {
       implementation(compose.desktop.currentOs)
+      implementation(libs.harawata.appdirs)
       implementation(libs.kstore.file)
       implementation(libs.ktor.client.cio)
       implementation(libs.kotlinx.coroutines.swing)

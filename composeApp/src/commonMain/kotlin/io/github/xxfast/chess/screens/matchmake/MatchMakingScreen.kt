@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -34,7 +35,6 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -51,6 +51,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import io.github.xxfast.chess.ChessApplicationScope
 import io.github.xxfast.chess.discover.Player
 import io.github.xxfast.chess.resources.pieces.Pieces
 import io.github.xxfast.chess.resources.pieces.pieces.Regular
@@ -58,9 +59,11 @@ import io.github.xxfast.chess.resources.pieces.pieces.regular.Wn
 import io.github.xxfast.decompose.router.rememberOnRoute
 
 @Composable
-fun MatchMakingScreen() {
+fun ChessApplicationScope.MatchMakingScreen(
+  onSettings: () -> Unit
+) {
   val viewModel: MatchMakingViewModel =
-    rememberOnRoute(MatchMakingViewModel::class) { MatchMakingViewModel() }
+    rememberOnRoute(MatchMakingViewModel::class) { MatchMakingViewModel(this) }
 
   val state: MatchMakingState by viewModel.state.collectAsState()
 
@@ -69,7 +72,7 @@ fun MatchMakingScreen() {
     onJoin = viewModel::onJoin,
     onLeave = viewModel::onLeave,
     onMatch = viewModel::onMatch,
-    onEditProfile = { TODO() }
+    onSettings = onSettings
   )
 }
 
@@ -80,7 +83,7 @@ fun MatchMakingView(
   onJoin: (String, Int) -> Unit,
   onLeave: (ServerState) -> Unit,
   onMatch: (Player) -> Unit,
-  onEditProfile: () -> Unit,
+  onSettings: () -> Unit,
 ) {
   var showErrorDialog: Boolean by remember { mutableStateOf(false) }
 
@@ -100,9 +103,8 @@ fun MatchMakingView(
       LargeTopAppBar(
         title = { Text("Chess-KMP") },
         actions = {
-          IconButton(onClick = onEditProfile) {
-            if (state.player == null) CircularProgressIndicator()
-            else PlayerAvatar(player = state.player)
+          IconButton(onClick = onSettings) {
+            Icon(Icons.Rounded.Settings, contentDescription = "Settings")
           }
         },
         scrollBehavior = scrollBehavior
@@ -110,7 +112,7 @@ fun MatchMakingView(
     },
   ) { scaffoldPadding ->
     LazyVerticalGrid(
-      columns = GridCells.Adaptive(128.dp),
+      columns = GridCells.Adaptive(256.dp),
       contentPadding = PaddingValues(16.dp),
       verticalArrangement = Arrangement.spacedBy(16.dp),
       horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -215,11 +217,9 @@ fun MatchMakingView(
         }
       }
 
-      if (state.server.isOnline && state.server.players == Loading) item(span = {
-        GridItemSpan(
-          maxLineSpan
-        )
-      }) {
+      if (state.server.isOnline && state.server.players == Loading) item(
+        span = { GridItemSpan(maxLineSpan) }
+      ) {
         Box(modifier = Modifier.fillMaxWidth()) {
           CircularProgressIndicator(
             modifier = Modifier

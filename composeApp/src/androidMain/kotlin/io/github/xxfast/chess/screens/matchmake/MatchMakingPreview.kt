@@ -6,9 +6,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import io.github.xxfast.chess.discover.Player
 import io.github.xxfast.chess.resources.ChessTheme
-import io.ktor.util.network.NetworkAddress
 
-private val PREVIEW_PLAYER = Player(
+val PREVIEW_PLAYER = Player(
   id = "player1",
   elo = 100,
   name = "xxfast",
@@ -37,7 +36,7 @@ fun MatchMakingOnlinePreview() {
         onJoin = { _, _ -> },
         onMatch = { },
         onLeave = { },
-        onEditProfile = { },
+        onSettings = { },
       )
     }
   }
@@ -56,7 +55,7 @@ fun MatchMakingOfflinePreview() {
         onJoin = { _, _ -> },
         onMatch = { },
         onLeave = { },
-        onEditProfile = { },
+        onSettings = { },
       )
     }
   }
@@ -75,7 +74,7 @@ fun MatchMakingJoinedPreview() {
         onJoin = { _, _ -> },
         onMatch = { },
         onLeave = { },
-        onEditProfile = { },
+        onSettings = { },
       )
     }
   }

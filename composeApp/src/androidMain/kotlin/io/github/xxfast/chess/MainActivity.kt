@@ -4,9 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.tooling.preview.Preview
 import io.github.xxfast.decompose.router.LocalRouterContext
 import io.github.xxfast.decompose.router.RouterContext
 import io.github.xxfast.decompose.router.defaultRouterContext
@@ -20,14 +18,9 @@ class MainActivity : ComponentActivity() {
 
     setContent {
       CompositionLocalProvider(LocalRouterContext provides rootRouterContext) {
-        App()
+        with(ChessApplication){ RootScreen() }
       }
     }
   }
 }
 
-@Preview
-@Composable
-fun AppAndroidPreview() {
-  App()
-}
