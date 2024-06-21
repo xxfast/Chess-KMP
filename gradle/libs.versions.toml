@@ -12,6 +12,7 @@ androidx-material = "1.12.0"
 androidx-test-junit = "1.1.5"
 compose-multiplatform = "1.6.11"
 composeDnd = "0.2.0"
+decompose = "3.0.0"
 decompose-router = "0.8.0"
 junit = "4.13.2"
 kotlin = "1.9.24"
@@ -19,6 +20,7 @@ kotlinx-coroutines = "1.8.1"
 kotlinx-rpc = "0.1.0"
 kotlinx-serialization-json = "1.6.1"
 ksp = "1.9.24-1.0.20"
+kstore = "0.8.0"
 ktor = "2.3.11"
 logback = "1.5.6"
 material3 = "1.2.1"
@@ -37,6 +39,8 @@ androidx-material = { group = "com.google.android.material", name = "material", 
 androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
 compose-dnd = { module = "com.mohamedrejeb.dnd:compose-dnd", version.ref = "composeDnd" }
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+decompose-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
 decompose-router = { module = "io.github.xxfast:decompose-router", version.ref = "decompose-router" }
 google-android-material = { module = "com.google.android.material:material", version.ref = "material-components" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -52,6 +56,9 @@ kotlinx-rpc-runtime-server = { module = "org.jetbrains.kotlinx:kotlinx-rpc-runti
 kotlinx-rpc-transport-ktor-client = { module = "org.jetbrains.kotlinx:kotlinx-rpc-transport-ktor-client" }
 kotlinx-rpc-transport-ktor-server = { module = "org.jetbrains.kotlinx:kotlinx-rpc-transport-ktor-server" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
+kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
+kstore-storage = { module = "io.github.xxfast:kstore-storage", version.ref = "kstore" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-contentnegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }

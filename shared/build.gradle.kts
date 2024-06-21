@@ -40,6 +40,7 @@ kotlin {
 
       implementation(libs.kotlinx.rpc.runtime)
       implementation(libs.kotlinx.serialization.json)
+      implementation(libs.uuid)
     }
   }
 }

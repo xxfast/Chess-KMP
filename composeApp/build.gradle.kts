@@ -1,5 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
@@ -7,10 +6,10 @@ plugins {
   alias(libs.plugins.androidApplication)
   alias(libs.plugins.compose.multiplatform)
   alias(libs.plugins.kotlinx.rpc.platform)
+  alias(libs.plugins.kotlinPluginSerialization)
 }
 
 kotlin {
-
   // TODO: Add back wasm after https://github.com/Kotlin/kotlinx-rpc/issues/95
   js {
     moduleName = "composeApp"
@@ -54,6 +53,7 @@ kotlin {
       implementation(compose.preview)
       implementation(libs.androidx.activity.compose)
       implementation(libs.google.android.material)
+      implementation(libs.kstore.file)
       implementation(libs.ktor.client.okhttp)
     }
 
@@ -70,6 +70,9 @@ kotlin {
       implementation(compose.components.uiToolingPreview)
 
       implementation(libs.compose.dnd)
+      implementation(libs.decompose)
+      implementation(libs.decompose.compose)
+      implementation(libs.kstore)
       implementation(libs.kotlinx.rpc.runtime.serialization.json)
       implementation(libs.kotlinx.rpc.transport.ktor.client)
       implementation(libs.ktor.client.contentnegotiation)
@@ -83,15 +86,18 @@ kotlin {
 
     desktopMain.dependencies {
       implementation(compose.desktop.currentOs)
+      implementation(libs.kstore.file)
       implementation(libs.ktor.client.cio)
       implementation(libs.kotlinx.coroutines.swing)
     }
 
     iosMain.dependencies {
+      implementation(libs.kstore.file)
       implementation(libs.ktor.client.cio)
     }
 
     jsMain.dependencies {
+      implementation(libs.kstore.storage)
       implementation(libs.ktor.client.js)
     }
   }
