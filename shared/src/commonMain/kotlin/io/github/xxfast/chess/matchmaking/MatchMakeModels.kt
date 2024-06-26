@@ -29,10 +29,14 @@ enum class InviteStatus {
 
 @Serializable
 sealed class DiscoveryEvent {
-  @Serializable data class Send(val from: Player, val to: Player): DiscoveryEvent()
-  @Serializable data class Decline(val invite: Invite): DiscoveryEvent()
-  @Serializable data class Accept(val invite: Invite): DiscoveryEvent()
-  @Serializable data class Withdraw(val invite: Invite): DiscoveryEvent()
+  @Serializable
+  data class Send(val from: Player, val to: Player) : DiscoveryEvent()
+  @Serializable
+  data class Decline(val invite: Invite) : DiscoveryEvent()
+  @Serializable
+  data class Accept(val invite: Invite) : DiscoveryEvent()
+  @Serializable
+  data class Withdraw(val invite: Invite) : DiscoveryEvent()
 }
 
 @Serializable
@@ -51,6 +55,7 @@ data class Match(
 @JvmInline
 value class Address(val value: String) : CharSequence by value {
   constructor(host: String, port: Int) : this("$host:$port")
+
   val host: String get() = value.substringBefore(":")
   val port: Int get() = value.substringAfter(":").toInt()
 }

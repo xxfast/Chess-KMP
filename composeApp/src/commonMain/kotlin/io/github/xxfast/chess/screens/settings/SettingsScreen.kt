@@ -109,7 +109,7 @@ fun SettingsView(
     )
   }
 
-  if(state.serverAddress != Loading && showAddressDialog){
+  if (state.serverAddress != Loading && showAddressDialog) {
     var address: String by remember(state) { mutableStateOf(state.serverAddress.host) }
     var port: Int by remember(state) { mutableStateOf(state.serverAddress.port) }
 
@@ -240,7 +240,7 @@ fun SettingsItem(
   icon: @Composable () -> Unit,
   label: @Composable () -> Unit,
   value: @Composable () -> Unit,
-  onClick: () -> Unit
+  onClick: () -> Unit,
 ) {
   Card(
     onClick = onClick,

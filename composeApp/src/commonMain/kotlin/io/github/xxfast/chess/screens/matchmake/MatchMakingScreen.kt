@@ -1,8 +1,6 @@
 package io.github.xxfast.chess.screens.matchmake
 
 import KottieAnimation
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,26 +23,8 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberTopAppBarState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -52,13 +32,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.xxfast.chess.ChessApplicationScope
+import io.github.xxfast.chess.components.PlayerAvatar
 import io.github.xxfast.chess.matchmaking.Invite
 import io.github.xxfast.chess.matchmaking.InviteStatus.*
 import io.github.xxfast.chess.matchmaking.Player
 import io.github.xxfast.chess.resources.Animations
-import io.github.xxfast.chess.resources.pieces.Pieces
-import io.github.xxfast.chess.resources.pieces.pieces.Regular
-import io.github.xxfast.chess.resources.pieces.pieces.regular.Wn
 import io.github.xxfast.decompose.router.rememberOnRoute
 import kotlinx.coroutines.delay
 import kottieAnimationState.KottieAnimationState
@@ -284,8 +262,8 @@ private fun IdleView(
         val isEnabled =
           // Ignore self invites
           opponent != state.player &&
-              // Ignore invites already sent
-              state.invites?.none { it.to == opponent } == true
+            // Ignore invites already sent
+            state.invites?.none { it.to == opponent } == true
 
         Card(
           onClick = {
@@ -354,29 +332,3 @@ private fun LoadingView(
   }
 }
 
-@Composable
-private fun PlayerAvatar(
-  player: Player,
-  icon: @Composable () -> Unit = {
-    Image(
-      imageVector = Pieces.Regular.Wn,
-      contentDescription = null,
-      modifier = Modifier
-        .size(48.dp)
-    )
-  },
-) {
-  Column(
-    verticalArrangement = Arrangement.spacedBy(4.dp),
-    horizontalAlignment = Alignment.CenterHorizontally,
-  ) {
-    icon()
-
-    Text(
-      text = "${player.elo}",
-      style = MaterialTheme.typography.bodyMedium,
-      color = MaterialTheme.colorScheme.primary,
-      fontWeight = FontWeight.ExtraBold
-    )
-  }
-}
