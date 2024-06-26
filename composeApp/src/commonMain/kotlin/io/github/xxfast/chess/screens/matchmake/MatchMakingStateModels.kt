@@ -1,24 +1,16 @@
 package io.github.xxfast.chess.screens.matchmake
 
-import io.github.xxfast.chess.discover.Player
+import io.github.xxfast.chess.matchmaking.Invite
+import io.github.xxfast.chess.matchmaking.Player
+import kotlin.time.Duration.Companion.seconds
 
 val Loading = null
-val None = null
+
+val REDIRECT_DURATION = 5.seconds
 
 data class MatchMakingState(
   val player: Player? = Loading,
-  val server: ServerState? = None,
+  val isOnline: Boolean? = Loading,
+  val players: List<Player>? = Loading,
+  val invites: Set<Invite>? = Loading,
 )
-
-data class ServerState(
-  val name: String,
-  val address: Address,
-  val isOnline: Boolean,
-  val players: List<Player>?,
-)
-
-sealed interface MatchMakingEvent {
-  data class Join(val host: String, val port: Int) : MatchMakingEvent
-  data class Leave(val address: Address) : MatchMakingEvent
-  data class Match(val player: Player) : MatchMakingEvent
-}

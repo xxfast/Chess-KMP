@@ -48,7 +48,9 @@ import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 @Composable
-fun GameScreen() {
+fun GameScreen(
+  onClose: () -> Unit,
+) {
   var state: GameState by remember { mutableStateOf(GameState()) }
 
   GameView(
@@ -58,7 +60,8 @@ fun GameScreen() {
       val board: Board = state.board.move(move)
       val moves: List<Move> = legalMoves(board, turn)
       state = state.copy(board = board, turn = turn, moves = moves)
-    }
+    },
+    onClose = onClose,
   )
 }
 
@@ -67,13 +70,14 @@ fun GameScreen() {
 fun GameView(
   state: GameState,
   onMove: (move: Move) -> Unit,
+  onClose: () -> Unit,
 ) {
   Scaffold(
     topBar = {
       LargeTopAppBar(
         title = { Text("Game") },
         navigationIcon = {
-          IconButton(onClick = {}) {
+          IconButton(onClick = onClose) {
             Icon(Icons.Rounded.Close, null)
           }
         }

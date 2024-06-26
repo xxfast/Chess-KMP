@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 sealed class RootScreens {
   @Serializable data object MatchMaking : RootScreens()
   @Serializable data object Settings : RootScreens()
+  @Serializable data object Game : RootScreens()
 }

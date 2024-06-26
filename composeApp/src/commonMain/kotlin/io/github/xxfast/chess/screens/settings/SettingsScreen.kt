@@ -18,7 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Warning
+import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -50,8 +50,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import io.github.xxfast.chess.ChessApplicationScope
+import io.github.xxfast.chess.matchmaking.Address
 import io.github.xxfast.decompose.router.rememberOnRoute
-import kotlin.reflect.KFunction1
 
 @Composable
 fun ChessApplicationScope.SettingsScreen(
@@ -66,6 +66,7 @@ fun ChessApplicationScope.SettingsScreen(
     state = state,
     onBack = onBack,
     onUpdateUsername = viewModel::onUpdateUsername,
+    onUpdateAddress = viewModel::onUpdateAddress
   )
 }
 
@@ -75,11 +76,14 @@ fun SettingsView(
   state: SettingsState,
   onBack: () -> Unit,
   onUpdateUsername: (String) -> Unit,
+  onUpdateAddress: (Address) -> Unit,
 ) {
   val scrollBehavior: TopAppBarScrollBehavior =
     TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
   var showUsernameDialog: Boolean by remember { mutableStateOf(false) }
+  var showAddressDialog: Boolean by remember { mutableStateOf(false) }
+
   if (state.player != Loading && showUsernameDialog) {
     var username: String by remember { mutableStateOf(state.player.name) }
     AlertDialog(
@@ -100,6 +104,47 @@ fun SettingsView(
           label = { Text("Username") },
           keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         )
+      },
+      properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
+    )
+  }
+
+  if(state.serverAddress != Loading && showAddressDialog){
+    var address: String by remember(state) { mutableStateOf(state.serverAddress.host) }
+    var port: Int by remember(state) { mutableStateOf(state.serverAddress.port) }
+
+    AlertDialog(
+      onDismissRequest = { showAddressDialog = false },
+      title = { Text("Address") },
+      confirmButton = {
+        TextButton(
+          onClick = {
+            onUpdateAddress(Address(address, port))
+            showAddressDialog = false
+          }
+        ) { Text("Ok") }
+      },
+      text = {
+        val errorText: @Composable () -> Unit = { Text("Please enter a valid address") }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+          OutlinedTextField(
+            value = address,
+            onValueChange = { address = it },
+            isError = address.isBlank(),
+            supportingText = errorText.takeIf { address.isBlank() },
+            label = { Text("Address") },
+            modifier = Modifier.fillMaxWidth().weight(.75f),
+          )
+
+          OutlinedTextField(
+            value = "$port",
+            onValueChange = { port = it.toInt() },
+            label = { Text("Port") },
+            modifier = Modifier.fillMaxWidth().weight(.25f),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+          )
+        }
       },
       properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
     )
@@ -137,6 +182,7 @@ fun SettingsView(
       item {
         SettingsItem(
           onClick = { showUsernameDialog = true },
+          icon = { Icon(Icons.Rounded.Person, null) },
           label = { Text(text = "Username", fontWeight = FontWeight.Bold) },
           value = {
             AnimatedContent(
@@ -153,12 +199,45 @@ fun SettingsView(
           }
         )
       }
+
+      item {
+        Text(
+          text = "Server",
+          style = MaterialTheme.typography.titleMedium,
+        )
+      }
+
+      item {
+        SettingsItem(
+          onClick = { showAddressDialog = true },
+          icon = { Icon(Icons.Rounded.Public, null) },
+          label = { Text(text = "Address", fontWeight = FontWeight.Bold) },
+          value = {
+            AnimatedContent(
+              targetState = state.serverAddress,
+              transitionSpec = { fadeIn() togetherWith fadeOut() },
+            ) { address ->
+              if (address == Loading)
+                CircularProgressIndicator(modifier = Modifier.size(12.dp))
+              else Text(
+                text = address.value,
+                style = MaterialTheme.typography.bodyLarge
+              )
+            }
+          }
+        )
+      }
+
+      item {
+
+      }
     }
   }
 }
 
 @Composable
 fun SettingsItem(
+  icon: @Composable () -> Unit,
   label: @Composable () -> Unit,
   value: @Composable () -> Unit,
   onClick: () -> Unit
@@ -172,7 +251,7 @@ fun SettingsItem(
       verticalAlignment = Alignment.CenterVertically,
       modifier = Modifier.padding(16.dp).fillMaxWidth(),
     ) {
-      Icon(Icons.Rounded.Person, null)
+      icon()
       Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         ProvideTextStyle(MaterialTheme.typography.labelMedium) { label() }
         value()

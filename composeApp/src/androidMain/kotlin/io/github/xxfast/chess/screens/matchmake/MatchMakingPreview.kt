@@ -4,23 +4,21 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
-import io.github.xxfast.chess.discover.Player
+import io.github.xxfast.chess.matchmaking.Invite
+import io.github.xxfast.chess.matchmaking.InviteStatus
+import io.github.xxfast.chess.matchmaking.Player
 import io.github.xxfast.chess.resources.ChessTheme
 
-val PREVIEW_PLAYER = Player(
+val PREVIEW_PLAYER_1 = Player(
   id = "player1",
   elo = 100,
   name = "xxfast",
 )
 
-private val LOCALHOST = ServerState(
-  name = "localhost",
-  address = Address("localhost:8080"),
-  isOnline = true,
-  players = listOf(
-    Player("player2", 110, "opponent1"),
-    Player("player3", 120, "opponent2"),
-  ),
+val PREVIEW_PLAYER_2 = Player(
+  id = "player2",
+  elo = 100,
+  name = "isuru",
 )
 
 @Preview(wallpaper = Wallpapers.RED_DOMINATED_EXAMPLE, apiLevel = 31)
@@ -30,13 +28,21 @@ fun MatchMakingOnlinePreview() {
     Surface {
       MatchMakingView(
         state = MatchMakingState(
-          player = PREVIEW_PLAYER,
-          server = null,
+          player = PREVIEW_PLAYER_1,
+          isOnline = true,
+          players = listOf(PREVIEW_PLAYER_1),
+          invites = setOf(
+            Invite(PREVIEW_PLAYER_1, PREVIEW_PLAYER_2, InviteStatus.SENT),
+            Invite(PREVIEW_PLAYER_2, PREVIEW_PLAYER_1, InviteStatus.SENT),
+            Invite(PREVIEW_PLAYER_2, PREVIEW_PLAYER_2, InviteStatus.REJECTED),
+          )
         ),
-        onJoin = { _, _ -> },
-        onMatch = { },
-        onLeave = { },
-        onSettings = { },
+        onInvite = { _, _ -> },
+        onAccept = {},
+        onDecline = {},
+        onWithdraw = {},
+        onGame = {},
+        onSettings = {},
       )
     }
   }
@@ -49,13 +55,14 @@ fun MatchMakingOfflinePreview() {
     Surface {
       MatchMakingView(
         state = MatchMakingState(
-          player = PREVIEW_PLAYER,
-          server = LOCALHOST,
+          player = PREVIEW_PLAYER_1, isOnline = false
         ),
-        onJoin = { _, _ -> },
-        onMatch = { },
-        onLeave = { },
-        onSettings = { },
+        onInvite = { _, _ -> },
+        onAccept = {},
+        onDecline = {},
+        onSettings = {},
+        onGame = {},
+        onWithdraw = {},
       )
     }
   }
@@ -63,18 +70,19 @@ fun MatchMakingOfflinePreview() {
 
 @Preview(wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE, apiLevel = 31)
 @Composable
-fun MatchMakingJoinedPreview() {
+fun MatchMakingEmptyPreview() {
   ChessTheme {
     Surface {
       MatchMakingView(
         state = MatchMakingState(
-          player = PREVIEW_PLAYER,
-          server = LOCALHOST
+          player = PREVIEW_PLAYER_1, isOnline = true, players = emptyList()
         ),
-        onJoin = { _, _ -> },
-        onMatch = { },
-        onLeave = { },
-        onSettings = { },
+        onInvite = { _, _ -> },
+        onAccept = {},
+        onDecline = {},
+        onSettings = {},
+        onGame = {},
+        onWithdraw = {},
       )
     }
   }

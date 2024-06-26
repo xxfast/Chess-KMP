@@ -1,19 +1,23 @@
 package io.github.xxfast.chess
 
-import io.github.xxfast.chess.discover.Player
+import io.github.xxfast.chess.matchmaking.Player
+import io.github.xxfast.chess.matchmaking.Address
 import io.github.xxfast.chess.utils.storeOf
 import io.github.xxfast.kstore.KStore
 import kotlinx.serialization.json.Json
 
+// TODO: Use context receivers once available for multiplatform
 interface ChessApplicationScope {
   val platform: PlatformScope
   val json: Json
   val userStore: KStore<Player>
+  val serverStore: KStore<Address>
 }
 
 class ChessApplication(override val platform: PlatformScope) : ChessApplicationScope {
   override lateinit var json: Json
   override lateinit var userStore: KStore<Player>
+  override lateinit var serverStore: KStore<Address>
 }
 
 expect class PlatformScope
@@ -29,5 +33,6 @@ val PlatformScope.ChessApplication get() = ChessApplication {
   }
 
   userStore = storeOf(name = "player", default = Player())
+  serverStore = storeOf(name = "server", default = Address("10.0.2.2", 8080))
 }
 
