@@ -29,7 +29,13 @@ fun DiscoverDomain(player: Player, events: SharedFlow<DiscoveryEvent>): Discover
   // List the player in the global queue
   DisposableEffect(player) {
     globalQueue.value += player
-    onDispose { globalQueue.value -= player }
+    onDispose {
+      globalQueue.value -= player
+      // Remove any invites from that player if they exist
+      globalInvites.value = globalInvites.value
+        .filter { invite -> invite.from != player && invite.to != player }
+        .toSet()
+    }
   }
 
   LaunchedEffect(Unit) {
@@ -61,8 +67,6 @@ fun DiscoverDomain(player: Player, events: SharedFlow<DiscoveryEvent>): Discover
           .filter { invite -> invite != event.invite }
           .toSet()
       }
-
-      println("INVITES $globalInvites")
     }
   }
 

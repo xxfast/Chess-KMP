@@ -20,6 +20,7 @@ kotlin = "1.9.24"
 kotlinx-coroutines = "1.8.1"
 kotlinx-rpc = "0.1.0"
 kotlinx-serialization-json = "1.6.1"
+kottie = "1.9.6-alpha02"
 ksp = "1.9.24-1.0.20"
 kstore = "0.8.0"
 ktor = "2.3.11"
@@ -58,6 +59,7 @@ kotlinx-rpc-runtime-server = { module = "org.jetbrains.kotlinx:kotlinx-rpc-runti
 kotlinx-rpc-transport-ktor-client = { module = "org.jetbrains.kotlinx:kotlinx-rpc-transport-ktor-client" }
 kotlinx-rpc-transport-ktor-server = { module = "org.jetbrains.kotlinx:kotlinx-rpc-transport-ktor-server" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+kottie = { module = "io.github.ismai117:kottie", version.ref = "kottie" }
 kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
 kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
 kstore-storage = { module = "io.github.xxfast:kstore-storage", version.ref = "kstore" }
