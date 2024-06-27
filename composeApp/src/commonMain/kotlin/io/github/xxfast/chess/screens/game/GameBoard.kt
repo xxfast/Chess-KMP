@@ -36,6 +36,13 @@ import com.mohamedrejeb.compose.dnd.DragAndDropState
 import com.mohamedrejeb.compose.dnd.drag.DraggableItem
 import com.mohamedrejeb.compose.dnd.drop.dropTarget
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
+import io.github.xxfast.chess.game.Cell
+import io.github.xxfast.chess.game.Coordinate
+import io.github.xxfast.chess.game.GameState
+import io.github.xxfast.chess.game.Move
+import io.github.xxfast.chess.game.maxHeight
+import io.github.xxfast.chess.game.maxWidth
+import io.github.xxfast.chess.game.text
 import io.github.xxfast.chess.resources.ChessTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.pow

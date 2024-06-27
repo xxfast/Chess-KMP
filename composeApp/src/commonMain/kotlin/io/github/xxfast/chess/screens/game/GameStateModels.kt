@@ -3,6 +3,7 @@ package io.github.xxfast.chess.screens.game
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import io.github.xxfast.chess.game.Piece
 import io.github.xxfast.chess.resources.pieces.Pieces
 import io.github.xxfast.chess.resources.pieces.pieces.Regular
 import io.github.xxfast.chess.resources.pieces.pieces.regular.Bb
@@ -17,15 +18,14 @@ import io.github.xxfast.chess.resources.pieces.pieces.regular.Wn
 import io.github.xxfast.chess.resources.pieces.pieces.regular.Wp
 import io.github.xxfast.chess.resources.pieces.pieces.regular.Wq
 import io.github.xxfast.chess.resources.pieces.pieces.regular.Wr
-import io.github.xxfast.chess.screens.game.PieceColor.Black
-import io.github.xxfast.chess.screens.game.PieceColor.White
-import io.github.xxfast.chess.screens.game.PieceType.Bishop
-import io.github.xxfast.chess.screens.game.PieceType.King
-import io.github.xxfast.chess.screens.game.PieceType.Knight
-import io.github.xxfast.chess.screens.game.PieceType.Pawn
-import io.github.xxfast.chess.screens.game.PieceType.Queen
-import io.github.xxfast.chess.screens.game.PieceType.Rook
-import kotlinx.serialization.Serializable
+import io.github.xxfast.chess.game.PieceColor.Black
+import io.github.xxfast.chess.game.PieceColor.White
+import io.github.xxfast.chess.game.PieceType.Bishop
+import io.github.xxfast.chess.game.PieceType.King
+import io.github.xxfast.chess.game.PieceType.Knight
+import io.github.xxfast.chess.game.PieceType.Pawn
+import io.github.xxfast.chess.game.PieceType.Queen
+import io.github.xxfast.chess.game.PieceType.Rook
 
 // TODO: Swapping the assets for dark theme for better consistancy
 val Piece.icon: ImageVector
@@ -59,14 +59,3 @@ val Piece.icon: ImageVector
       this.type == King && this.color == Black  -> Pieces.Regular.Bk
       else -> error("Invalid piece $this")
     }
-
-@Serializable
-data class GameState(
-  val board: Board = Standard,
-  val turn: PieceColor = White,
-  val moves: List<Move> = emptyList()
-)
-
-sealed class GameEvent {
-  data class MakeMove(val move: Move) : GameEvent()
-}

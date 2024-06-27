@@ -1,4 +1,4 @@
-package io.github.xxfast.chess.screens.game
+package io.github.xxfast.chess.game
 
 fun Board.move(move: Move): Board = mapIndexed { y, row ->
   row.mapIndexed { x, cell ->

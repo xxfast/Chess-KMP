@@ -1,19 +1,19 @@
-package io.github.xxfast.chess.screens.game
+package io.github.xxfast.chess.game
 
-import io.github.xxfast.chess.screens.game.Piece.Companion.BlackBishop
-import io.github.xxfast.chess.screens.game.Piece.Companion.BlackKing
-import io.github.xxfast.chess.screens.game.Piece.Companion.BlackKnight
-import io.github.xxfast.chess.screens.game.Piece.Companion.BlackPawn
-import io.github.xxfast.chess.screens.game.Piece.Companion.BlackQueen
-import io.github.xxfast.chess.screens.game.Piece.Companion.BlackRook
-import io.github.xxfast.chess.screens.game.Piece.Companion.WhiteBishop
-import io.github.xxfast.chess.screens.game.Piece.Companion.WhiteKing
-import io.github.xxfast.chess.screens.game.Piece.Companion.WhiteKnight
-import io.github.xxfast.chess.screens.game.Piece.Companion.WhitePawn
-import io.github.xxfast.chess.screens.game.Piece.Companion.WhiteQueen
-import io.github.xxfast.chess.screens.game.Piece.Companion.WhiteRook
-import io.github.xxfast.chess.screens.game.PieceColor.Black
-import io.github.xxfast.chess.screens.game.PieceColor.White
+import io.github.xxfast.chess.game.Piece.Companion.BlackBishop
+import io.github.xxfast.chess.game.Piece.Companion.BlackKing
+import io.github.xxfast.chess.game.Piece.Companion.BlackKnight
+import io.github.xxfast.chess.game.Piece.Companion.BlackPawn
+import io.github.xxfast.chess.game.Piece.Companion.BlackQueen
+import io.github.xxfast.chess.game.Piece.Companion.BlackRook
+import io.github.xxfast.chess.game.Piece.Companion.WhiteBishop
+import io.github.xxfast.chess.game.Piece.Companion.WhiteKing
+import io.github.xxfast.chess.game.Piece.Companion.WhiteKnight
+import io.github.xxfast.chess.game.Piece.Companion.WhitePawn
+import io.github.xxfast.chess.game.Piece.Companion.WhiteQueen
+import io.github.xxfast.chess.game.Piece.Companion.WhiteRook
+import io.github.xxfast.chess.game.PieceColor.Black
+import io.github.xxfast.chess.game.PieceColor.White
 import kotlinx.serialization.Serializable
 
 enum class PieceType { Pawn, Knight, Bishop, Rook, Queen, King }
@@ -94,4 +94,16 @@ val Standard: Board = List(8) { y ->
       else -> null
     }
   }
+}
+
+@Serializable
+data class GameState(
+  val board: Board = Standard,
+  val turn: PieceColor = White,
+  val moves: List<Move> = emptyList()
+)
+
+@Serializable
+sealed class GameEvent {
+  @Serializable data class MakeMove(val move: Move) : GameEvent()
 }
