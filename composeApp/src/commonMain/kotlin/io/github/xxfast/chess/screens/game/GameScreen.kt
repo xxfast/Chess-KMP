@@ -11,26 +11,27 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import io.github.xxfast.decompose.router.rememberOnRoute
 
 @Composable
 fun GameScreen(
   onClose: () -> Unit,
 ) {
-  var state: GameState by remember { mutableStateOf(GameState()) }
+  val viewModel: GameViewModel = rememberOnRoute(GameViewModel::class) { context ->
+    GameViewModel(context)
+  }
+
+  val state: GameState by viewModel.state.collectAsState()
 
   GameView(
     state = state,
-    onMove = { move ->
-      val turn: PieceColor = !state.turn
-      val board: Board = state.board.move(move)
-      val moves: List<Move> = legalMoves(board, turn)
-      state = state.copy(board = board, turn = turn, moves = moves)
-    },
+    onMove = viewModel::onMove,
     onClose = onClose,
   )
 }

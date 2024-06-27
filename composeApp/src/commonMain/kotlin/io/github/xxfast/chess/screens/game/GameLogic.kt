@@ -13,7 +13,13 @@ fun Board.move(move: Move): Board = mapIndexed { y, row ->
   }
 }
 
-fun moves(board: Board): List<Move> = board
+fun legalMoves(board: Board, turn: PieceColor): List<Move> = moves(board)
+  // filter out the moves of pieces not of the current turn
+  .filter { move -> move.piece.color == turn }
+  // filter out moves that put the king in check
+  .filter { move -> !move.inCheck(board, turn) }
+
+private fun moves(board: Board): List<Move> = board
   .flatMapIndexed { y, row ->
     row.mapIndexedNotNull { x, piece ->
       when (piece?.type) {
@@ -28,12 +34,6 @@ fun moves(board: Board): List<Move> = board
     }
   }
   .flatten()
-
-fun legalMoves(board: Board, turn: PieceColor): List<Move> = moves(board)
-  // filter out the moves of pieces not of the current turn
-  .filter { move -> move.piece.color == turn }
-  // filter out moves that put the king in check
-  .filter { move -> !move.inCheck(board, turn) }
 
 private fun Move.inCheck(board: Board, turn: PieceColor): Boolean {
   val moved: Board = board.move(this)

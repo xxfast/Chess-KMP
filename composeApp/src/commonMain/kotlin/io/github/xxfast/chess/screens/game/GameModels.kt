@@ -14,12 +14,14 @@ import io.github.xxfast.chess.screens.game.Piece.Companion.WhiteQueen
 import io.github.xxfast.chess.screens.game.Piece.Companion.WhiteRook
 import io.github.xxfast.chess.screens.game.PieceColor.Black
 import io.github.xxfast.chess.screens.game.PieceColor.White
+import kotlinx.serialization.Serializable
 
 enum class PieceType { Pawn, Knight, Bishop, Rook, Queen, King }
 
 enum class PieceColor { White, Black ; }
 operator fun PieceColor.not(): PieceColor = if (this == White) Black else White
 
+@Serializable
 data class Piece(
   val type: PieceType,
   val color: PieceColor
@@ -75,6 +77,7 @@ data class Cell(
   val piece: Piece
 )
 
+@Serializable
 data class Move(
   val piece: Piece,
   val from: Coordinate,

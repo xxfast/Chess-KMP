@@ -186,7 +186,7 @@ fun GameBoard(
 
 @Preview
 @Composable
-fun GameBoardPreview() {
+fun GameBoardCommonPreview() {
   ChessTheme {
     Surface {
       GameBoard(

@@ -25,6 +25,7 @@ import io.github.xxfast.chess.screens.game.PieceType.Knight
 import io.github.xxfast.chess.screens.game.PieceType.Pawn
 import io.github.xxfast.chess.screens.game.PieceType.Queen
 import io.github.xxfast.chess.screens.game.PieceType.Rook
+import kotlinx.serialization.Serializable
 
 // TODO: Swapping the assets for dark theme for better consistancy
 val Piece.icon: ImageVector
@@ -59,8 +60,13 @@ val Piece.icon: ImageVector
       else -> error("Invalid piece $this")
     }
 
+@Serializable
 data class GameState(
   val board: Board = Standard,
   val turn: PieceColor = White,
-  val moves: List<Move> = legalMoves(board, turn)
+  val moves: List<Move> = emptyList()
 )
+
+sealed class GameEvent {
+  data class MakeMove(val move: Move) : GameEvent()
+}
