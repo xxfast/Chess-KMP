@@ -9,11 +9,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.github.xxfast.chess.ChessApplicationScope
 import io.github.xxfast.chess.api.HttpClient
-import io.github.xxfast.chess.matchmaking.Address
-import io.github.xxfast.chess.matchmaking.DiscoveryEvent
-import io.github.xxfast.chess.matchmaking.DiscoveryState
-import io.github.xxfast.chess.matchmaking.DiscoveryApi
-import io.github.xxfast.chess.matchmaking.Player
+import io.github.xxfast.chess.discovery.Address
+import io.github.xxfast.chess.discovery.DiscoveryEvent
+import io.github.xxfast.chess.discovery.DiscoveryState
+import io.github.xxfast.chess.discovery.DiscoveryApi
+import io.github.xxfast.chess.discovery.Player
 import io.github.xxfast.chess.screens.settings.Loading
 import io.ktor.client.request.url
 import kotlinx.coroutines.Job

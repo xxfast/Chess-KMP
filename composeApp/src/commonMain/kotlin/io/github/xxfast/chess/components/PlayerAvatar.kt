@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import io.github.xxfast.chess.matchmaking.Player
+import io.github.xxfast.chess.discovery.Player
 import io.github.xxfast.chess.resources.pieces.Pieces
 import io.github.xxfast.chess.resources.pieces.pieces.Regular
 import io.github.xxfast.chess.resources.pieces.pieces.regular.Wn

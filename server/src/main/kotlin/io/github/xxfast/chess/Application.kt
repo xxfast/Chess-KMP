@@ -1,7 +1,7 @@
 package io.github.xxfast.chess
 
 import SERVER_PORT
-import io.github.xxfast.chess.matchmaking.DiscoveryApi
+import io.github.xxfast.chess.discovery.DiscoveryApi
 import io.github.xxfast.chess.discovery.DiscoveryService
 import io.ktor.server.application.*
 import io.ktor.server.engine.*

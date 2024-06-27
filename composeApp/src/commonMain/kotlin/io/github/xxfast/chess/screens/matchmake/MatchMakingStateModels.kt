@@ -1,7 +1,7 @@
 package io.github.xxfast.chess.screens.matchmake
 
-import io.github.xxfast.chess.matchmaking.Invite
-import io.github.xxfast.chess.matchmaking.Player
+import io.github.xxfast.chess.discovery.Invite
+import io.github.xxfast.chess.discovery.Player
 import kotlin.time.Duration.Companion.seconds
 
 val Loading = null

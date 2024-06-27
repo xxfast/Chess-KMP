@@ -4,9 +4,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
-import io.github.xxfast.chess.matchmaking.Invite
-import io.github.xxfast.chess.matchmaking.InviteStatus
-import io.github.xxfast.chess.matchmaking.Player
+import io.github.xxfast.chess.discovery.Invite
+import io.github.xxfast.chess.discovery.InviteStatus
+import io.github.xxfast.chess.discovery.Player
 import io.github.xxfast.chess.resources.ChessTheme
 
 val PREVIEW_PLAYER_1 = Player(

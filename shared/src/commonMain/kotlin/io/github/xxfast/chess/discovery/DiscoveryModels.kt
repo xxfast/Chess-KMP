@@ -1,4 +1,4 @@
-package io.github.xxfast.chess.matchmaking
+package io.github.xxfast.chess.discovery
 
 import com.benasher44.uuid.uuid4
 import kotlinx.serialization.Serializable

@@ -5,8 +5,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import io.github.xxfast.chess.ChessApplicationScope
-import io.github.xxfast.chess.matchmaking.Player
-import io.github.xxfast.chess.matchmaking.Address
+import io.github.xxfast.chess.discovery.Player
+import io.github.xxfast.chess.discovery.Address
 import kotlinx.coroutines.flow.SharedFlow
 
 @Composable

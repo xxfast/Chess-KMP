@@ -33,9 +33,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.xxfast.chess.ChessApplicationScope
 import io.github.xxfast.chess.components.PlayerAvatar
-import io.github.xxfast.chess.matchmaking.Invite
-import io.github.xxfast.chess.matchmaking.InviteStatus.*
-import io.github.xxfast.chess.matchmaking.Player
+import io.github.xxfast.chess.discovery.Invite
+import io.github.xxfast.chess.discovery.InviteStatus.*
+import io.github.xxfast.chess.discovery.Player
 import io.github.xxfast.chess.resources.Animations
 import io.github.xxfast.decompose.router.rememberOnRoute
 import kotlinx.coroutines.delay

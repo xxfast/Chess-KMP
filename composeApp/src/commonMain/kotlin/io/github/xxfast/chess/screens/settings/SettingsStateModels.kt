@@ -1,7 +1,7 @@
 package io.github.xxfast.chess.screens.settings
 
-import io.github.xxfast.chess.matchmaking.Player
-import io.github.xxfast.chess.matchmaking.Address
+import io.github.xxfast.chess.discovery.Player
+import io.github.xxfast.chess.discovery.Address
 import kotlinx.serialization.Serializable
 
 val Loading = null

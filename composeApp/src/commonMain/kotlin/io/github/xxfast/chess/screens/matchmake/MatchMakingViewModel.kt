@@ -2,9 +2,9 @@ package io.github.xxfast.chess.screens.matchmake
 
 import app.cash.molecule.launchMolecule
 import io.github.xxfast.chess.ChessApplicationScope
-import io.github.xxfast.chess.matchmaking.DiscoveryEvent
-import io.github.xxfast.chess.matchmaking.Invite
-import io.github.xxfast.chess.matchmaking.Player
+import io.github.xxfast.chess.discovery.DiscoveryEvent
+import io.github.xxfast.chess.discovery.Invite
+import io.github.xxfast.chess.discovery.Player
 import io.github.xxfast.chess.utils.Default
 import io.github.xxfast.chess.utils.ViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
