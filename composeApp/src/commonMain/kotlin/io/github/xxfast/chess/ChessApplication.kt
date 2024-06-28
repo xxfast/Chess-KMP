@@ -30,6 +30,7 @@ val PlatformScope.ChessApplication get() = ChessApplication {
   json = Json {
     ignoreUnknownKeys = true
     encodeDefaults = true
+    allowStructuredMapKeys = true
   }
 
   userStore = storeOf(name = "player", default = Player())

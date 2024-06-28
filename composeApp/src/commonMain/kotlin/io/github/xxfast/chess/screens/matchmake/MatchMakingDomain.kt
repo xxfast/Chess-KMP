@@ -10,9 +10,9 @@ import androidx.compose.runtime.setValue
 import io.github.xxfast.chess.ChessApplicationScope
 import io.github.xxfast.chess.api.HttpClient
 import io.github.xxfast.chess.discovery.Address
+import io.github.xxfast.chess.discovery.DiscoveryApi
 import io.github.xxfast.chess.discovery.DiscoveryEvent
 import io.github.xxfast.chess.discovery.DiscoveryState
-import io.github.xxfast.chess.discovery.DiscoveryApi
 import io.github.xxfast.chess.discovery.Player
 import io.github.xxfast.chess.screens.settings.Loading
 import io.ktor.client.request.url
@@ -81,6 +81,6 @@ fun ChessApplicationScope.MatchMakingDomain(events: SharedFlow<DiscoveryEvent>):
     player = player,
     isOnline = client != null,
     players = discovery?.players,
-    invites = discovery?.invites
+    invites = discovery?.invites,
   )
 }

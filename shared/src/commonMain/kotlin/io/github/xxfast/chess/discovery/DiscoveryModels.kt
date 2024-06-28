@@ -1,6 +1,7 @@
 package io.github.xxfast.chess.discovery
 
 import com.benasher44.uuid.uuid4
+import io.github.xxfast.chess.game.PieceColor
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 import kotlin.random.Random
@@ -28,6 +29,12 @@ enum class InviteStatus {
 }
 
 @Serializable
+data class Match(
+  val id: String = uuid4().toString(),
+  val players: Map<PieceColor, Player>
+)
+
+@Serializable
 sealed class DiscoveryEvent {
   @Serializable
   data class Send(val from: Player, val to: Player) : DiscoveryEvent()
@@ -43,12 +50,6 @@ sealed class DiscoveryEvent {
 data class DiscoveryState(
   val players: List<Player>? = Loading,
   val invites: Set<Invite>? = Loading,
-)
-
-@Serializable
-data class Match(
-  val white: Player,
-  val black: Player,
 )
 
 @Serializable

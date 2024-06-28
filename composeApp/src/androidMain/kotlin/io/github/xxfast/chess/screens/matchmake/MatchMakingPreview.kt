@@ -41,8 +41,8 @@ fun MatchMakingOnlinePreview() {
         onAccept = {},
         onDecline = {},
         onWithdraw = {},
-        onGame = {},
         onSettings = {},
+        onGame = {},
       )
     }
   }
@@ -60,9 +60,9 @@ fun MatchMakingOfflinePreview() {
         onInvite = { _, _ -> },
         onAccept = {},
         onDecline = {},
+        onWithdraw = {},
         onSettings = {},
         onGame = {},
-        onWithdraw = {},
       )
     }
   }
@@ -80,9 +80,9 @@ fun MatchMakingEmptyPreview() {
         onInvite = { _, _ -> },
         onAccept = {},
         onDecline = {},
+        onWithdraw = {},
         onSettings = {},
         onGame = {},
-        onWithdraw = {},
       )
     }
   }
