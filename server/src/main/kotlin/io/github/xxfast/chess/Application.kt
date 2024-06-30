@@ -3,6 +3,7 @@ package io.github.xxfast.chess
 import SERVER_PORT
 import io.github.xxfast.chess.discovery.DiscoveryApi
 import io.github.xxfast.chess.discovery.DiscoveryService
+import io.github.xxfast.chess.utils.jsonModule
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -26,11 +27,11 @@ fun Application.module() {
     }
 
     rpc("/game") {
-      rpcConfig { serialization { json() } }
+      rpcConfig { serialization { json(jsonModule) } }
     }
 
     rpc("/discover") {
-      rpcConfig { serialization { json() } }
+      rpcConfig { serialization { json(jsonModule) } }
       registerService<DiscoveryApi> { DiscoveryService(coroutineContext) }
     }
   }

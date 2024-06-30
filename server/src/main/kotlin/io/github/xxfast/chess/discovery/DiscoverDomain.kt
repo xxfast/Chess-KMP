@@ -5,8 +5,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import io.github.xxfast.chess.game.Game
+import io.github.xxfast.chess.game.PieceColor
+import io.github.xxfast.chess.game.globalMatches
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
 private val globalQueue: MutableStateFlow<List<Player>> = MutableStateFlow(emptyList())
@@ -15,6 +19,12 @@ private val globalInvites: MutableStateFlow<Set<Invite>> = MutableStateFlow(empt
 @Composable
 fun DiscoverDomain(player: Player, events: SharedFlow<DiscoveryEvent>): DiscoveryState {
   val players: List<Player> by globalQueue.collectAsState()
+
+  val matches: Set<Match>? by globalMatches
+    .map { matches -> matches.filter { match -> player in match.players.values } }
+    .map { it.toSet() }
+    .collectAsState(Loading)
+
   val invites: Set<Invite>? by globalInvites
     .map { invites -> invites.filter { invite -> invite.from == player || invite.to == player } }
     .map { it.toSet() }
@@ -49,13 +59,22 @@ fun DiscoverDomain(player: Player, events: SharedFlow<DiscoveryEvent>): Discover
           }
           .toSet()
 
-        is DiscoveryEvent.Accept -> globalInvites.value = updatedInvites
-          .map { invite ->
-            if (invite.from == event.invite.from && invite.to == event.invite.to)
-              invite.copy(status = InviteStatus.ACCEPTED)
-            else invite
-          }
-          .toSet()
+        is DiscoveryEvent.Accept -> {
+          // Remove the invite from the global invites
+          globalInvites.value = updatedInvites
+            .filter { invite -> invite != event.invite }
+            .toSet()
+
+          // Create a game in the global games
+          val match = Match(
+            players = mapOf(
+              PieceColor.White to event.invite.from,
+              PieceColor.Black to event.invite.to
+            ),
+            game = Game()
+          )
+          globalMatches.value += match
+        }
 
         is DiscoveryEvent.Withdraw -> globalInvites.value = updatedInvites
           .filter { invite -> invite != event.invite }
@@ -66,6 +85,7 @@ fun DiscoverDomain(player: Player, events: SharedFlow<DiscoveryEvent>): Discover
 
   return DiscoveryState(
     players = players,
-    invites = invites
-  )
+    invites = invites,
+    matches = matches
+  ).also { println(it) }
 }

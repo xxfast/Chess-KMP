@@ -10,12 +10,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
@@ -47,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.xxfast.chess.ChessApplicationScope
+import io.github.xxfast.chess.components.MatchView
 import io.github.xxfast.chess.components.PlayerAvatar
 import io.github.xxfast.chess.discovery.Invite
 import io.github.xxfast.chess.discovery.InviteStatus.ACCEPTED
@@ -54,6 +57,7 @@ import io.github.xxfast.chess.discovery.InviteStatus.REJECTED
 import io.github.xxfast.chess.discovery.InviteStatus.SENT
 import io.github.xxfast.chess.discovery.Match
 import io.github.xxfast.chess.discovery.Player
+import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.resources.Animations
 import io.github.xxfast.decompose.router.rememberOnRoute
 import kottieAnimationState.KottieAnimationState
@@ -113,6 +117,7 @@ fun MatchMakingView(
         .nestedScroll(scrollBehavior.nestedScrollConnection)
         .imePadding()
     ) {
+      GamesView(state.matches, onGame)
       InvitesView(state.player, state.invites, onAccept, onDecline, onWithdraw)
       PlayersView(state.player, state.players, state.invites, onInvite)
     }
@@ -332,3 +337,30 @@ private fun LazyGridScope.PlayersView(
   }
 }
 
+private fun LazyGridScope.GamesView(
+  matches: Set<Match>?,
+  onGame: (Match) -> Unit,
+){
+  item(span = { GridItemSpan(maxLineSpan) }) {
+    Text(
+      text = "Games ${matches?.size?.let { "($it)" }.orEmpty()}",
+      style = MaterialTheme.typography.titleMedium
+    )
+  }
+
+  if (matches == Loading) item(span = { GridItemSpan(maxLineSpan) }) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+      CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+    }
+  } else item(span = { GridItemSpan(maxLineSpan) }) {
+    LazyHorizontalGrid(
+      rows = GridCells.Adaptive(256.dp),
+      horizontalArrangement = Arrangement.spacedBy(16.dp),
+      modifier = Modifier.height(256.dp)
+    ) {
+      items(matches.toList()) { match ->
+        MatchView(match, onGame)
+      }
+    }
+  }
+}

@@ -2,6 +2,7 @@ package io.github.xxfast.chess
 
 import io.github.xxfast.chess.discovery.Player
 import io.github.xxfast.chess.discovery.Address
+import io.github.xxfast.chess.utils.jsonModule
 import io.github.xxfast.chess.utils.storeOf
 import io.github.xxfast.kstore.KStore
 import kotlinx.serialization.json.Json
@@ -27,12 +28,7 @@ fun PlatformScope.ChessApplication(builder: ChessApplication.() -> Unit): ChessA
     .apply(builder)
 
 val PlatformScope.ChessApplication get() = ChessApplication {
-  json = Json {
-    ignoreUnknownKeys = true
-    encodeDefaults = true
-    allowStructuredMapKeys = true
-  }
-
+  json = jsonModule
   userStore = storeOf(name = "player", default = Player())
   serverStore = storeOf(name = "server", default = Address("10.0.2.2", 8080))
 }

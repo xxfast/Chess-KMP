@@ -1,4 +1,4 @@
-package io.github.xxfast.chess.screens.game
+package io.github.xxfast.chess.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.AnimationConstants
@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,7 +29,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -36,23 +40,71 @@ import com.mohamedrejeb.compose.dnd.DragAndDropState
 import com.mohamedrejeb.compose.dnd.drag.DraggableItem
 import com.mohamedrejeb.compose.dnd.drop.dropTarget
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
+import io.github.xxfast.chess.discovery.Match
 import io.github.xxfast.chess.game.Cell
 import io.github.xxfast.chess.game.Coordinate
-import io.github.xxfast.chess.game.GameState
+import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.game.Move
 import io.github.xxfast.chess.game.maxHeight
 import io.github.xxfast.chess.game.maxWidth
 import io.github.xxfast.chess.game.text
 import io.github.xxfast.chess.resources.ChessTheme
+import io.github.xxfast.chess.screens.game.icon
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 @Composable
+fun MatchView(
+  match: Match,
+  onGame: (Match) -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  Card(
+    onClick = { onGame(match) },
+    modifier = modifier
+  ) {
+    Box(
+      modifier = Modifier
+        .padding(16.dp)
+    ) {
+      GameBoard(
+        game = match.game,
+        modifier = Modifier
+          .clip(MaterialTheme.shapes.medium)
+          .align(Alignment.Center),
+      )
+
+      Surface(
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        color = MaterialTheme.colorScheme.primary,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier
+          .align(Alignment.Center),
+      ) {
+        Column(
+          modifier = Modifier.padding(16.dp),
+        ) {
+          Row {
+            match.players.values.forEach { player -> PlayerAvatar(player) }
+          }
+          Text(
+            text = "Player v Player",
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
+          )
+        }
+      }
+    }
+  }
+}
+
+@Composable
 fun GameBoard(
-  state: GameState,
-  onMove: (move: Move) -> Unit,
+  game: Game,
+  showCoordinates: Boolean = false,
+  onMove: ((move: Move) -> Unit)? = null,
   modifier: Modifier = Modifier,
 ) {
   val dragAndDropState: DragAndDropState<Cell> = rememberDragAndDropState()
@@ -63,32 +115,32 @@ fun GameBoard(
 
   DragAndDropContainer(state = dragAndDropState) {
     BoxWithConstraints(modifier) {
-      val maxSize: Int = maxOf(state.board.maxWidth, state.board.maxHeight)
+      val maxSize: Int = maxOf(game.board.maxWidth, game.board.maxHeight)
       val cellSize: Dp = min(this.maxWidth, this.maxHeight) / maxSize
 
       Column {
         // TODO: Flip the board so that the player's perspective is always from the bottom
-        state.board.reversed().forEachIndexed { fy, row ->
+        game.board.reversed().forEachIndexed { fy, row ->
           Row {
             row.forEachIndexed { x, piece ->
-              val y = state.board.maxHeight - 1 - fy
+              val y = game.board.maxHeight - 1 - fy
               val isEvenRow = fy % 2 == 0
               val isEvenColumn = x % 2 == 0
               val coordinate: Coordinate = x to y
 
-              val allowedMove: Boolean = state.moves.any { move ->
+              val allowedMove: Boolean = game.moves.any { move ->
                 move.piece == selected?.piece &&
                     move.from == selected?.coordinate &&
                     move.to == coordinate
               }
 
-              val isEnabled: Boolean = piece?.color == state.turn || allowedMove
+              val isEnabled: Boolean = piece?.color == game.turn || allowedMove
               val selection: Cell? = selected
 
               Surface(
                 onClick = {
                   // if there is a selection and this cell is allowed
-                  if (selection != null && allowedMove) {
+                  if (onMove != null && selection != null && allowedMove) {
                     // make the move
                     onMove(Move(selection.piece, selection.coordinate, coordinate))
                     // clear the selection
@@ -105,7 +157,7 @@ fun GameBoard(
                       else null
                   }
                 },
-                enabled = isEnabled,
+                enabled = onMove != null && isEnabled,
                 color =
                 when {
                   selected?.coordinate == coordinate -> MaterialTheme.colorScheme.inversePrimary
@@ -120,7 +172,7 @@ fun GameBoard(
                       state = dragAndDropState,
                       key = coordinate,
                       onDrop = { state ->
-                        onMove(Move(state.data.piece, state.data.coordinate, coordinate))
+                        onMove?.invoke(Move(state.data.piece, state.data.coordinate, coordinate))
                       }
                     ) else Modifier
                   )
@@ -166,6 +218,7 @@ fun GameBoard(
                     state = dragAndDropState,
                     key = cell,
                     data = cell,
+                    enabled = onMove != null,
                   ) {
                     if (!isDragging) Image(
                       imageVector = piece.icon,
@@ -176,7 +229,7 @@ fun GameBoard(
                   }
                 }
 
-                Text(
+                if (showCoordinates) Text(
                   text = coordinate.text,
                   modifier = Modifier.padding(2.dp),
                   color = MaterialTheme.colorScheme.outline,
@@ -191,13 +244,14 @@ fun GameBoard(
   }
 }
 
+
 @Preview
 @Composable
 fun GameBoardCommonPreview() {
   ChessTheme {
     Surface {
       GameBoard(
-        state = GameState(),
+        game = Game(),
         onMove = { _ -> }
       )
     }

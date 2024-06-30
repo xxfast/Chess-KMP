@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,7 +39,7 @@ fun PlayerAvatar(
     Text(
       text = "${player.elo}",
       style = MaterialTheme.typography.bodyMedium,
-      color = MaterialTheme.colorScheme.primary,
+      color = LocalContentColor.current,
       fontWeight = FontWeight.ExtraBold
     )
   }

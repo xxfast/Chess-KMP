@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.rpc.RPC
 
 interface GameApi : RPC {
-  suspend fun game(match: Match, events: SharedFlow<GameEvent>): Flow<GameState>
+  suspend fun match(id: String, events: SharedFlow<GameEvent>): Flow<Match>
 }

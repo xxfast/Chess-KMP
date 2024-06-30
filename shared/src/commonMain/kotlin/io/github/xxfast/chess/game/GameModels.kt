@@ -97,7 +97,7 @@ val Standard: Board = List(8) { y ->
 }
 
 @Serializable
-data class GameState(
+data class Game(
   val board: Board = Standard,
   val turn: PieceColor = White,
   val moves: List<Move> = emptyList()

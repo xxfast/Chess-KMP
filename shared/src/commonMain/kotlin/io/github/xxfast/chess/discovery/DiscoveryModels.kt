@@ -1,12 +1,14 @@
 package io.github.xxfast.chess.discovery
 
 import com.benasher44.uuid.uuid4
+import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.game.PieceColor
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 import kotlin.random.Random
 
 val Loading = null
+val None = null
 
 @Serializable
 data class Player(
@@ -31,7 +33,8 @@ enum class InviteStatus {
 @Serializable
 data class Match(
   val id: String = uuid4().toString(),
-  val players: Map<PieceColor, Player>
+  val players: Map<PieceColor, Player>,
+  val game: Game,
 )
 
 @Serializable
@@ -50,6 +53,7 @@ sealed class DiscoveryEvent {
 data class DiscoveryState(
   val players: List<Player>? = Loading,
   val invites: Set<Invite>? = Loading,
+  val matches: Set<Match>? = None
 )
 
 @Serializable

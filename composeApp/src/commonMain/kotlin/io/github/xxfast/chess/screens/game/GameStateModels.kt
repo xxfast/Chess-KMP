@@ -3,6 +3,7 @@ package io.github.xxfast.chess.screens.game
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.game.Piece
 import io.github.xxfast.chess.resources.pieces.Pieces
 import io.github.xxfast.chess.resources.pieces.pieces.Regular
@@ -26,6 +27,7 @@ import io.github.xxfast.chess.game.PieceType.Knight
 import io.github.xxfast.chess.game.PieceType.Pawn
 import io.github.xxfast.chess.game.PieceType.Queen
 import io.github.xxfast.chess.game.PieceType.Rook
+import kotlinx.serialization.Serializable
 
 // TODO: Swapping the assets for dark theme for better consistancy
 val Piece.icon: ImageVector
@@ -59,3 +61,10 @@ val Piece.icon: ImageVector
       this.type == King && this.color == Black  -> Pieces.Regular.Bk
       else -> error("Invalid piece $this")
     }
+
+val Loading = null
+
+@Serializable
+data class GameState(
+  val game: Game? = Loading,
+)

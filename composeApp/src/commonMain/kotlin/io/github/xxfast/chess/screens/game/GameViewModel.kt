@@ -1,8 +1,10 @@
 package io.github.xxfast.chess.screens.game
 
 import app.cash.molecule.moleculeFlow
+import io.github.xxfast.chess.ChessApplicationScope
+import io.github.xxfast.chess.discovery.Match
 import io.github.xxfast.chess.game.GameEvent
-import io.github.xxfast.chess.game.GameState
+import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.game.Move
 import io.github.xxfast.chess.utils.Default
 import io.github.xxfast.chess.utils.ViewModel
@@ -14,10 +16,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class GameViewModel(routerContext: RouterContext) : ViewModel() {
+class GameViewModel(
+  routerContext: RouterContext,
+  scope: ChessApplicationScope,
+  match: Match,
+) : ViewModel() {
   private val events: MutableSharedFlow<GameEvent> = MutableSharedFlow()
   private val initialState: GameState = routerContext.state(GameState()) { state.value }
-  val state: StateFlow<GameState> = moleculeFlow(Default) { GameDomain(events) }
+  val state: StateFlow<GameState> = moleculeFlow(Default) { with(scope) { GameDomain(match, events) } }
     .stateIn(this, SharingStarted.Lazily, initialState)
 
   fun onMove(move: Move) { launch { events.emit(GameEvent.MakeMove(move)) } }

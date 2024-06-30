@@ -51,6 +51,7 @@ fun ChessApplicationScope.RootScreen() {
         )
 
         is RootScreens.Game -> GameScreen(
+          match = screen.match,
           onClose = { router.pop() }
         )
       }
