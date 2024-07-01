@@ -61,7 +61,7 @@ operator fun Board.get(type: PieceType, color: PieceColor): Cell? {
 }
 
 operator fun Board.contains(coordinate: Coordinate): Boolean =
-  coordinate.x in 0.. maxWidth && coordinate.y in 0 ..  maxHeight
+  coordinate.x in 0..< maxWidth && coordinate.y in 0 ..<  maxHeight
 
 typealias Coordinate = Pair<Int, Int>
 val Coordinate.x: Int get() = first
@@ -100,7 +100,7 @@ val Standard: Board = List(8) { y ->
 data class Game(
   val board: Board = Standard,
   val turn: PieceColor = White,
-  val moves: List<Move> = emptyList()
+  val moves: List<Move> = legalMoves(board, White)
 )
 
 @Serializable
