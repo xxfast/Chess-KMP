@@ -340,7 +340,7 @@ private fun LazyGridScope.PlayersView(
 private fun LazyGridScope.GamesView(
   matches: Set<Match>?,
   onGame: (Match) -> Unit,
-){
+) {
   item(span = { GridItemSpan(maxLineSpan) }) {
     Text(
       text = "Games ${matches?.size?.let { "($it)" }.orEmpty()}",
@@ -352,7 +352,7 @@ private fun LazyGridScope.GamesView(
     Box(modifier = Modifier.fillMaxWidth()) {
       CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }
-  } else item(span = { GridItemSpan(maxLineSpan) }) {
+  } else if (matches.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
     LazyHorizontalGrid(
       rows = GridCells.Adaptive(256.dp),
       horizontalArrangement = Arrangement.spacedBy(16.dp),
