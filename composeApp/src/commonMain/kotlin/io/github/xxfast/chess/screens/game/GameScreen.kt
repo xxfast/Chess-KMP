@@ -61,23 +61,17 @@ fun GameView(
       )
     },
   ) { scaffoldPadding ->
-    AnimatedContent(
-      targetState = state,
+    Box(
       modifier = Modifier
         .fillMaxSize()
         .padding(scaffoldPadding)
-    ) { state ->
-      Box(
-        modifier = Modifier
-          .fillMaxSize()
-      ) {
-        if (state.game == null) CircularProgressIndicator(modifier = Modifier.align(Center))
-        else GameBoard(
-          game = state.game,
-          onMove = onMove,
-          modifier = Modifier.fillMaxSize(),
-        )
-      }
+    ) {
+      if (state.game == null) CircularProgressIndicator(modifier = Modifier.align(Center))
+      else GameBoard(
+        game = state.game,
+        onMove = onMove,
+        modifier = Modifier.fillMaxSize(),
+      )
     }
   }
 }
