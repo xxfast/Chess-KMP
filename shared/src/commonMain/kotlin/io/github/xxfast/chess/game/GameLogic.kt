@@ -4,7 +4,7 @@ fun Board.move(move: Move): Board = mapIndexed { y, row ->
   row.mapIndexed { x, cell ->
     when {
       // Move the piece
-      x to y == move.to -> move.piece
+      x to y == move.to -> this[move.from]
       // Clear the cell
       x to y == move.from -> null
       // Or do nothing
@@ -15,9 +15,9 @@ fun Board.move(move: Move): Board = mapIndexed { y, row ->
 
 fun legalMoves(board: Board, turn: PieceColor): List<Move> = moves(board)
   // filter out the moves of pieces not of the current turn
-  .filter { move -> move.piece.color == turn }
-  // filter out moves that put the king in check
-  .filter { move -> !move.inCheck(board, turn) }
+  .filter { move -> board[move.from]?.color == turn }
+  // filter out moves that put their king in check
+  .filter { move -> !move.inCheck(board) }
 
 private fun moves(board: Board): List<Move> = board
   .flatMapIndexed { y, row ->
@@ -35,12 +35,21 @@ private fun moves(board: Board): List<Move> = board
   }
   .flatten()
 
-private fun Move.inCheck(board: Board, turn: PieceColor): Boolean {
+// Check if the move puts their own king in check
+fun Move.inCheck(board: Board): Boolean {
   val moved: Board = board.move(this)
-  val king: Cell = moved[PieceType.King, turn] ?: return false
+  val king = moved[PieceType.King, this.piece.color]!!
   return moves(moved)
-    .filter { it.piece.color != turn }
-    .any { it.to == king.coordinate }
+    .filter { it.piece.color != this.piece.color }
+    .any { move  -> king.coordinate == move.to }
+}
+
+fun Move.isCheckmate(board: Board): Boolean {
+  val moved: Board = board.move(this)
+  val nextTurn: PieceColor = !this.piece.color
+  return moves(moved)
+    .filter { it.piece.color == nextTurn }
+    .all { it.inCheck(moved) }
 }
 
 private fun pawnMoves(board: Board, piece: Piece, x: Int, y: Int): List<Move> {

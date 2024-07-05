@@ -3,7 +3,6 @@ package io.github.xxfast.chess.screens.matchmake
 import io.github.xxfast.chess.discovery.Invite
 import io.github.xxfast.chess.discovery.Match
 import io.github.xxfast.chess.discovery.Player
-import io.github.xxfast.chess.game.Game
 
 val Loading = null
 

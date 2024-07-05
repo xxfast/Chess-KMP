@@ -71,7 +71,6 @@ fun DiscoverDomain(player: Player, events: SharedFlow<DiscoveryEvent>): Discover
               PieceColor.White to event.invite.from,
               PieceColor.Black to event.invite.to
             ),
-            game = Game()
           )
           globalMatches.value += match
         }

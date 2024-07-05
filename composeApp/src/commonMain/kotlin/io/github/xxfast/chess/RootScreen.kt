@@ -12,9 +12,8 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.scale
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
-import io.github.xxfast.chess.discovery.Match
 import io.github.xxfast.chess.resources.ChessTheme
-import io.github.xxfast.chess.screens.game.GameScreen
+import io.github.xxfast.chess.screens.match.MatchScreen
 import io.github.xxfast.chess.screens.matchmake.MatchMakingScreen
 import io.github.xxfast.chess.screens.settings.SettingsScreen
 import io.github.xxfast.decompose.router.LocalRouterContext
@@ -43,15 +42,15 @@ fun ChessApplicationScope.RootScreen() {
       when (screen) {
         is RootScreens.MatchMaking -> MatchMakingScreen(
           onSettings = { router.push(RootScreens.Settings) },
-          onGame = { match: Match -> router.push(RootScreens.Game(match)) }
+          onGame = { router.push(RootScreens.Match(it)) }
         )
 
         is RootScreens.Settings -> SettingsScreen(
           onBack = { router.pop() }
         )
 
-        is RootScreens.Game -> GameScreen(
-          match = screen.match,
+        is RootScreens.Match -> MatchScreen(
+          id = screen.match,
           onClose = { router.pop() }
         )
       }

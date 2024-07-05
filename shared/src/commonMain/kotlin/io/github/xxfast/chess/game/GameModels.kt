@@ -18,13 +18,16 @@ import kotlinx.serialization.Serializable
 
 enum class PieceType { Pawn, Knight, Bishop, Rook, Queen, King }
 
-enum class PieceColor { White, Black ; }
+enum class PieceColor {
+  White, Black;
+}
+
 operator fun PieceColor.not(): PieceColor = if (this == White) Black else White
 
 @Serializable
 data class Piece(
   val type: PieceType,
-  val color: PieceColor
+  val color: PieceColor,
 ) {
   companion object {
     val WhitePawn = Piece(PieceType.Pawn, White)
@@ -47,6 +50,30 @@ val Board.maxWidth: Int get() = maxOf { it.size }
 val Board.maxHeight: Int get() = size
 val Board.lastY: Int get() = size - 1
 operator fun Board.get(x: Int, y: Int): Piece? = getOrNull(y)?.getOrNull(x)
+operator fun Board.get(at: Coordinate) = get(at.x, at.y)
+
+enum class Cells() {
+  a1, b1, c1, d1, e1, f1, g1, h1,
+  a2, b2, c2, d2, e2, f2, g2, h2,
+  a3, b3, c3, d3, e3, f3, g3, h3,
+  a4, b4, c4, d4, e4, f4, g4, h4,
+  a5, b5, c5, d5, e5, f5, g5, h5,
+  a6, b6, c6, d6, e6, f6, g6, h6,
+  a7, b7, c7, d7, e7, f7, g7, h7,
+  a8, b8, c8, d8, e8, f8, g8, h8;
+
+  val coordinate: Coordinate get() = name[0] - 'a' to name[1] - '1'
+}
+
+// Find the cells of the given type
+operator fun Board.get(type: PieceType): List<Cell> =
+  mapIndexedNotNull  { y, row ->
+    row.mapIndexedNotNull { x, piece ->
+      if (piece?.type == type) Cell(x to y, piece)
+      else null
+    }
+  }
+    .flatten()
 
 // Find the cell of the given type and color
 operator fun Board.get(type: PieceType, color: PieceColor): Cell? {
@@ -61,28 +88,26 @@ operator fun Board.get(type: PieceType, color: PieceColor): Cell? {
 }
 
 operator fun Board.contains(coordinate: Coordinate): Boolean =
-  coordinate.x in 0..< maxWidth && coordinate.y in 0 ..<  maxHeight
+  coordinate.x in 0..<maxWidth && coordinate.y in 0..<maxHeight
 
 typealias Coordinate = Pair<Int, Int>
+
 val Coordinate.x: Int get() = first
 val Coordinate.y: Int get() = second
-val Coordinate.text: String get() {
-  val coordinateX = "abcdefgh"[x]
-  val coordinateY = y + 1
-  return "$coordinateX$coordinateY"
-}
 
 data class Cell(
   val coordinate: Coordinate,
-  val piece: Piece
+  val piece: Piece,
 )
 
 @Serializable
 data class Move(
   val piece: Piece,
   val from: Coordinate,
-  val to: Coordinate
-)
+  val to: Coordinate,
+) {
+  constructor(piece: Piece, from: Cells, to: Cells) : this(piece, from.coordinate, to.coordinate)
+}
 
 val Standard: Board = List(8) { y ->
   List(8) { x ->
@@ -100,10 +125,13 @@ val Standard: Board = List(8) { y ->
 data class Game(
   val board: Board = Standard,
   val turn: PieceColor = White,
-  val moves: List<Move> = legalMoves(board, White)
+  val moves: List<Move> = legalMoves(board, White),
+  val history: List<String> = emptyList()
 )
+
 
 @Serializable
 sealed class GameEvent {
-  @Serializable data class MakeMove(val move: Move) : GameEvent()
+  @Serializable
+  data class MakeMove(val move: Move) : GameEvent()
 }

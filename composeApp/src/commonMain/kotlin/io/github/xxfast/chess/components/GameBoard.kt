@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -41,15 +40,20 @@ import com.mohamedrejeb.compose.dnd.drag.DraggableItem
 import com.mohamedrejeb.compose.dnd.drop.dropTarget
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
 import io.github.xxfast.chess.discovery.Match
+import io.github.xxfast.chess.discovery.MatchId
+import io.github.xxfast.chess.discovery.Player
+import io.github.xxfast.chess.game.Board
 import io.github.xxfast.chess.game.Cell
 import io.github.xxfast.chess.game.Coordinate
 import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.game.Move
+import io.github.xxfast.chess.game.Piece
+import io.github.xxfast.chess.game.get
 import io.github.xxfast.chess.game.maxHeight
 import io.github.xxfast.chess.game.maxWidth
 import io.github.xxfast.chess.game.text
 import io.github.xxfast.chess.resources.ChessTheme
-import io.github.xxfast.chess.screens.game.icon
+import io.github.xxfast.chess.screens.match.icon
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -58,11 +62,11 @@ import kotlin.math.sqrt
 @Composable
 fun MatchView(
   match: Match,
-  onGame: (Match) -> Unit,
+  onGame: (MatchId) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Card(
-    onClick = { onGame(match) },
+    onClick = { onGame(match.id) },
     modifier = modifier
   ) {
     Box(
@@ -103,6 +107,7 @@ fun MatchView(
 @Composable
 fun GameBoard(
   game: Game,
+  flip: Boolean = false,
   showCoordinates: Boolean = false,
   onMove: ((move: Move) -> Unit)? = null,
   modifier: Modifier = Modifier,
@@ -118,18 +123,20 @@ fun GameBoard(
       val maxSize: Int = maxOf(game.board.maxWidth, game.board.maxHeight)
       val cellSize: Dp = min(this.maxWidth, this.maxHeight) / maxSize
 
+      val board: Board = if (flip) game.board.reversed() else game.board
       Column {
         // TODO: Flip the board so that the player's perspective is always from the bottom
-        game.board.reversed().forEachIndexed { fy, row ->
+        board.forEachIndexed { dy, row ->
+          val y = if (flip) game.board.maxHeight - 1 - dy else dy
           Row {
             row.forEachIndexed { x, piece ->
-              val y = game.board.maxHeight - 1 - fy
-              val isEvenRow = fy % 2 == 0
+              val isEvenRow = dy % 2 == 0
               val isEvenColumn = x % 2 == 0
               val coordinate: Coordinate = x to y
 
               val allowedMove: Boolean = game.moves.any { move ->
-                move.piece == selected?.piece &&
+                val fromPiece: Piece = game.board[move.from] ?: return@any false
+                fromPiece == selected?.piece &&
                     move.from == selected?.coordinate &&
                     move.to == coordinate
               }

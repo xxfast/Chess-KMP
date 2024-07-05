@@ -1,4 +1,4 @@
-package io.github.xxfast.chess.screens.game
+package io.github.xxfast.chess.screens.match
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,9 +11,9 @@ import io.github.xxfast.chess.ChessApplicationScope
 import io.github.xxfast.chess.api.HttpClient
 import io.github.xxfast.chess.discovery.Address
 import io.github.xxfast.chess.discovery.Match
+import io.github.xxfast.chess.discovery.MatchId
 import io.github.xxfast.chess.game.GameApi
 import io.github.xxfast.chess.game.GameEvent
-import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.screens.settings.Loading
 import io.ktor.client.request.url
 import kotlinx.coroutines.Job
@@ -29,18 +29,19 @@ import kotlinx.rpc.transport.ktor.client.rpcConfig
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun ChessApplicationScope.GameDomain(match: Match, events: SharedFlow<GameEvent>): GameState {
+fun ChessApplicationScope.GameDomain(id: MatchId, events: SharedFlow<GameEvent>): MatchState {
   val address: Address? by serverStore.updates.collectAsState(Loading)
   var client: RPCClient? by remember { mutableStateOf(null) }
   var session: Job? by remember { mutableStateOf(null) }
 
-  var game: Game? by remember { mutableStateOf(Loading) }
+  val user by userStore.updates.collectAsState(Loading)
+  var match: Match? by remember { mutableStateOf(Loading) }
 
   LaunchedEffect(address) {
     val server: Address = address ?: return@LaunchedEffect
     // Cancel any previous sessions
     session?.cancel()
-    game = Loading
+    match = Loading
 
     do {
       client = try {
@@ -65,11 +66,14 @@ fun ChessApplicationScope.GameDomain(match: Match, events: SharedFlow<GameEvent>
       streamScoped {
         client
           .withService<GameApi>()
-          .match(match.id, events)
-          .collect { game = it.game }
+          .match(id, events)
+          .collect { match = it }
       }
     }
   }
 
-  return GameState(game)
+  return MatchState(
+    user = user,
+    match = match,
+  )
 }

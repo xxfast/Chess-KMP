@@ -10,9 +10,42 @@ import io.github.xxfast.chess.components.MatchView
 import io.github.xxfast.chess.discovery.Match
 import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.game.PieceColor
+import io.github.xxfast.chess.game.Standard
+import io.github.xxfast.chess.game.legalMoves
 import io.github.xxfast.chess.resources.ChessTheme
+import io.github.xxfast.chess.screens.match.MatchState
+import io.github.xxfast.chess.screens.match.MatchView
 import io.github.xxfast.chess.screens.matchmake.PREVIEW_PLAYER_1
 import io.github.xxfast.chess.screens.matchmake.PREVIEW_PLAYER_2
+
+@Preview
+@Composable
+fun GameViewPreview(){
+  ChessTheme {
+    Surface {
+      MatchView(
+        state = MatchState(
+          user = PREVIEW_PLAYER_1,
+          match = Match(
+            players = mapOf(
+              PieceColor.White to PREVIEW_PLAYER_1,
+              PieceColor.Black to PREVIEW_PLAYER_2,
+            ),
+            game = Game(
+              board = Standard,
+              turn = PieceColor.White,
+              moves = legalMoves(Standard, PieceColor.White),
+              history = List(100) { "#$it" }
+            ),
+          ),
+        ),
+        onMove = {},
+        onClose = {},
+      )
+    }
+  }
+
+}
 
 @Preview
 @Composable

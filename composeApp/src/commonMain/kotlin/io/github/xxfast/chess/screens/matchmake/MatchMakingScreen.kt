@@ -56,8 +56,8 @@ import io.github.xxfast.chess.discovery.InviteStatus.ACCEPTED
 import io.github.xxfast.chess.discovery.InviteStatus.REJECTED
 import io.github.xxfast.chess.discovery.InviteStatus.SENT
 import io.github.xxfast.chess.discovery.Match
+import io.github.xxfast.chess.discovery.MatchId
 import io.github.xxfast.chess.discovery.Player
-import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.resources.Animations
 import io.github.xxfast.decompose.router.rememberOnRoute
 import kottieAnimationState.KottieAnimationState
@@ -69,7 +69,7 @@ import utils.KottieConstants
 @Composable
 fun ChessApplicationScope.MatchMakingScreen(
   onSettings: () -> Unit,
-  onGame: (Match) -> Unit,
+  onGame: (MatchId) -> Unit,
 ) {
   val viewModel: MatchMakingViewModel =
     rememberOnRoute(MatchMakingViewModel::class) { MatchMakingViewModel(this) }
@@ -95,7 +95,7 @@ fun MatchMakingView(
   onAccept: (Invite) -> Unit,
   onDecline: (Invite) -> Unit,
   onWithdraw: (Invite) -> Unit,
-  onGame: (Match) -> Unit,
+  onGame: (MatchId) -> Unit,
   onSettings: () -> Unit,
 ) {
   val scrollBehavior: TopAppBarScrollBehavior =
@@ -339,7 +339,7 @@ private fun LazyGridScope.PlayersView(
 
 private fun LazyGridScope.GamesView(
   matches: Set<Match>?,
-  onGame: (Match) -> Unit,
+  onGame: (MatchId) -> Unit,
 ) {
   item(span = { GridItemSpan(maxLineSpan) }) {
     Text(

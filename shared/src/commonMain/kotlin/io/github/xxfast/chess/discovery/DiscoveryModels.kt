@@ -31,10 +31,15 @@ enum class InviteStatus {
 }
 
 @Serializable
+@JvmInline
+value class MatchId(val value: String = uuid4().toString()): CharSequence by value
+
+@Serializable
 data class Match(
-  val id: String = uuid4().toString(),
+  val id: MatchId = MatchId(),
   val players: Map<PieceColor, Player>,
-  val game: Game,
+  val game: Game = Game(),
+  val history: List<String> = emptyList(),
 )
 
 @Serializable

@@ -42,6 +42,10 @@ kotlin {
       implementation(libs.kotlinx.serialization.json)
       implementation(libs.uuid)
     }
+
+    commonTest.dependencies {
+      implementation(kotlin("test"))
+    }
   }
 }
 
