@@ -3,8 +3,8 @@ package io.github.xxfast.chess.screens.match
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import io.github.xxfast.chess.discovery.Match
-import io.github.xxfast.chess.discovery.Player
+import io.github.xxfast.chess.discovery.PlayerScore
+import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.game.Piece
 import io.github.xxfast.chess.resources.pieces.Pieces
 import io.github.xxfast.chess.resources.pieces.pieces.Regular
@@ -67,6 +67,7 @@ val Loading = null
 
 @Serializable
 data class MatchState(
-  val user: Player? = Loading,
-  val match: Match? = Loading
+  val userScore: PlayerScore? = Loading,
+  val opponentScore: PlayerScore? = Loading,
+  val game: Game? = Loading
 )

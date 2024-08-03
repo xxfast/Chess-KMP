@@ -3,7 +3,10 @@ package io.github.xxfast.chess.screens.settings
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +20,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowCircleLeft
+import androidx.compose.material.icons.rounded.ArrowCircleRight
+import androidx.compose.material.icons.rounded.ChevronLeft
+import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material3.AlertDialog
@@ -50,7 +57,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import io.github.xxfast.chess.ChessApplicationScope
+import io.github.xxfast.chess.components.PlayerAvatar
 import io.github.xxfast.chess.discovery.Address
+import io.github.xxfast.chess.game.Piece
+import io.github.xxfast.chess.screens.match.icon
 import io.github.xxfast.decompose.router.rememberOnRoute
 
 @Composable
@@ -58,7 +68,12 @@ fun ChessApplicationScope.SettingsScreen(
   onBack: () -> Unit,
 ) {
   val viewModel: SettingsViewModel =
-    rememberOnRoute(SettingsViewModel::class) { routerContext -> SettingsViewModel(this, routerContext) }
+    rememberOnRoute(SettingsViewModel::class) { routerContext ->
+      SettingsViewModel(
+        this,
+        routerContext
+      )
+    }
 
   val state: SettingsState by viewModel.state.collectAsState()
 
@@ -66,6 +81,7 @@ fun ChessApplicationScope.SettingsScreen(
     state = state,
     onBack = onBack,
     onUpdateUsername = viewModel::onUpdateUsername,
+    onUpdateAvatar = viewModel::onUpdateAvatar,
     onUpdateAddress = viewModel::onUpdateAddress
   )
 }
@@ -76,6 +92,7 @@ fun SettingsView(
   state: SettingsState,
   onBack: () -> Unit,
   onUpdateUsername: (String) -> Unit,
+  onUpdateAvatar: (Piece) -> Unit,
   onUpdateAddress: (Address) -> Unit,
 ) {
   val scrollBehavior: TopAppBarScrollBehavior =
@@ -88,7 +105,7 @@ fun SettingsView(
     var username: String by remember { mutableStateOf(state.player.name) }
     AlertDialog(
       onDismissRequest = { showUsernameDialog = false },
-      title = { Text("Username") },
+      title = { Text("Profile") },
       confirmButton = {
         TextButton(
           onClick = {
@@ -98,12 +115,38 @@ fun SettingsView(
         ) { Text("Ok") }
       },
       text = {
-        OutlinedTextField(
-          value = username,
-          onValueChange = { username = it },
-          label = { Text("Username") },
-          keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        )
+        Column(
+          verticalArrangement = Arrangement.spacedBy(4.dp),
+          horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+
+          Row(
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+          ) {
+            IconButton(
+              onClick = { onUpdateAvatar(state.player.piece.dec()) }
+            ) { Icon(Icons.Rounded.ChevronLeft, null) }
+
+            AnimatedContent(
+              targetState = state.player,
+              transitionSpec = { slideInHorizontally { -1 } togetherWith slideOutHorizontally { -1 } },
+            ) {
+              PlayerAvatar(it)
+            }
+
+            IconButton(
+              onClick = { onUpdateAvatar(state.player.piece.inc()) }
+            ) { Icon(Icons.Rounded.ChevronRight, null) }
+          }
+
+          OutlinedTextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Display name") },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+          )
+        }
       },
       properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
     )
@@ -182,8 +225,15 @@ fun SettingsView(
       item {
         SettingsItem(
           onClick = { showUsernameDialog = true },
-          icon = { Icon(Icons.Rounded.Person, null) },
-          label = { Text(text = "Username", fontWeight = FontWeight.Bold) },
+          icon = {
+            if (state.player == Loading) CircularProgressIndicator()
+            else Image(
+              imageVector = state.player.piece.icon,
+              contentDescription = null,
+              modifier = Modifier.size(24.dp)
+            )
+          },
+          label = { Text(text = "Profile", fontWeight = FontWeight.Bold) },
           value = {
             AnimatedContent(
               targetState = state.player,
@@ -210,7 +260,13 @@ fun SettingsView(
       item {
         SettingsItem(
           onClick = { showAddressDialog = true },
-          icon = { Icon(Icons.Rounded.Public, null) },
+          icon = {
+            Icon(
+              imageVector = Icons.Rounded.Public,
+              contentDescription = null,
+              tint = MaterialTheme.colorScheme.primary
+            )
+          },
           label = { Text(text = "Address", fontWeight = FontWeight.Bold) },
           value = {
             AnimatedContent(

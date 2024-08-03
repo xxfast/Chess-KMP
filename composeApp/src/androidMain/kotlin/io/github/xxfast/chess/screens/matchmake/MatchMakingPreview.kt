@@ -6,8 +6,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import io.github.xxfast.chess.discovery.Invite
 import io.github.xxfast.chess.discovery.InviteStatus
+import io.github.xxfast.chess.discovery.Match
+import io.github.xxfast.chess.discovery.MatchId
 import io.github.xxfast.chess.discovery.Player
+import io.github.xxfast.chess.discovery.PlayerScore
+import io.github.xxfast.chess.game.Game
+import io.github.xxfast.chess.game.PieceColor
 import io.github.xxfast.chess.resources.ChessTheme
+import kotlin.time.Duration.Companion.minutes
 
 val PREVIEW_PLAYER_1 = Player(
   id = "player1",
@@ -35,6 +41,16 @@ fun MatchMakingOnlinePreview() {
             Invite(PREVIEW_PLAYER_1, PREVIEW_PLAYER_2, InviteStatus.SENT),
             Invite(PREVIEW_PLAYER_2, PREVIEW_PLAYER_1, InviteStatus.SENT),
             Invite(PREVIEW_PLAYER_2, PREVIEW_PLAYER_2, InviteStatus.REJECTED),
+          ),
+          matches = setOf(
+            Match(
+              id = MatchId(),
+              game = Game(),
+              scores = listOf(
+                PlayerScore(PREVIEW_PLAYER_1, PieceColor.White, 0, 10.minutes),
+                PlayerScore(PREVIEW_PLAYER_2, PieceColor.Black, 0, 10.minutes),
+              ),
+            )
           )
         ),
         onInvite = { _, _ -> },

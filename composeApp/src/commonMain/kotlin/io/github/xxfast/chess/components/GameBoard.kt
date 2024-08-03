@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,9 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -39,9 +36,6 @@ import com.mohamedrejeb.compose.dnd.DragAndDropState
 import com.mohamedrejeb.compose.dnd.drag.DraggableItem
 import com.mohamedrejeb.compose.dnd.drop.dropTarget
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
-import io.github.xxfast.chess.discovery.Match
-import io.github.xxfast.chess.discovery.MatchId
-import io.github.xxfast.chess.discovery.Player
 import io.github.xxfast.chess.game.Board
 import io.github.xxfast.chess.game.Cell
 import io.github.xxfast.chess.game.Coordinate
@@ -60,54 +54,10 @@ import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 @Composable
-fun MatchView(
-  match: Match,
-  onGame: (MatchId) -> Unit,
-  modifier: Modifier = Modifier,
-) {
-  Card(
-    onClick = { onGame(match.id) },
-    modifier = modifier
-  ) {
-    Box(
-      modifier = Modifier
-        .padding(16.dp)
-    ) {
-      GameBoard(
-        game = match.game,
-        modifier = Modifier
-          .clip(MaterialTheme.shapes.medium)
-          .align(Alignment.Center),
-      )
-
-      Surface(
-        contentColor = MaterialTheme.colorScheme.onPrimary,
-        color = MaterialTheme.colorScheme.primary,
-        shape = MaterialTheme.shapes.large,
-        modifier = Modifier
-          .align(Alignment.Center),
-      ) {
-        Column(
-          modifier = Modifier.padding(16.dp),
-        ) {
-          Row {
-            match.players.values.forEach { player -> PlayerAvatar(player) }
-          }
-          Text(
-            text = "Player v Player",
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-          )
-        }
-      }
-    }
-  }
-}
-
-@Composable
 fun GameBoard(
   game: Game,
   flip: Boolean = false,
+  isCompact: Boolean = false,
   showCoordinates: Boolean = false,
   onMove: ((move: Move) -> Unit)? = null,
   modifier: Modifier = Modifier,
@@ -171,7 +121,7 @@ fun GameBoard(
                   isEvenRow xor isEvenColumn -> MaterialTheme.colorScheme.primaryContainer
                   else -> MaterialTheme.colorScheme.surface
                 },
-                shape = MaterialTheme.shapes.small,
+                shape =  MaterialTheme.shapes.small,
                 modifier = Modifier
                   .size(cellSize)
                   .then(
@@ -231,7 +181,10 @@ fun GameBoard(
                       imageVector = piece.icon,
                       contentDescription = null,
                       modifier = Modifier
-                        .padding(4.dp),
+                        .then(
+                          if (!isCompact) Modifier.padding(4.dp)
+                          else Modifier.padding(1.dp)
+                        ),
                     )
                   }
                 }

@@ -49,8 +49,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.xxfast.chess.ChessApplicationScope
-import io.github.xxfast.chess.components.MatchView
+import io.github.xxfast.chess.components.MatchSummaryView
 import io.github.xxfast.chess.components.PlayerAvatar
+import io.github.xxfast.chess.components.PlayerTitle
 import io.github.xxfast.chess.discovery.Invite
 import io.github.xxfast.chess.discovery.InviteStatus.ACCEPTED
 import io.github.xxfast.chess.discovery.InviteStatus.REJECTED
@@ -251,11 +252,7 @@ private fun LazyGridScope.InvitesView(
         else PlayerAvatar(invite.from)
 
         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-          Text(
-            text = if (invite.from == player) invite.to.name else invite.from.name,
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold.takeIf { invite.status != REJECTED },
-          )
+          PlayerTitle(player = if (invite.from == player) invite.to else invite.from)
 
           Text(
             text = when (invite.status) {
@@ -329,9 +326,13 @@ private fun LazyGridScope.PlayersView(
       ) {
         PlayerAvatar(opponent)
 
-        Text(
-          text = opponent.name,
-        )
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+          PlayerTitle(opponent)
+          if (opponent == player) Text(
+            text = "(You)",
+            style = MaterialTheme.typography.bodySmall
+          )
+        }
       }
     }
   }
@@ -356,10 +357,10 @@ private fun LazyGridScope.GamesView(
     LazyHorizontalGrid(
       rows = GridCells.Adaptive(256.dp),
       horizontalArrangement = Arrangement.spacedBy(16.dp),
-      modifier = Modifier.height(256.dp)
+      modifier = Modifier.height(368.dp)
     ) {
       items(matches.toList()) { match ->
-        MatchView(match, onGame)
+        MatchSummaryView(match, onGame)
       }
     }
   }

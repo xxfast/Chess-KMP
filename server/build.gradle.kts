@@ -19,6 +19,7 @@ application {
 }
 
 dependencies {
+  implementation(libs.kotlinx.datetime)
   implementation(libs.kotlinx.rpc.runtime.serialization.json)
   implementation(libs.kotlinx.rpc.transport.ktor.server)
   implementation(libs.kotlinx.serialization.json)

@@ -3,6 +3,7 @@ package io.github.xxfast.chess.screens.settings
 import app.cash.molecule.moleculeFlow
 import io.github.xxfast.chess.ChessApplicationScope
 import io.github.xxfast.chess.discovery.Address
+import io.github.xxfast.chess.game.Piece
 import io.github.xxfast.chess.utils.Default
 import io.github.xxfast.chess.utils.ViewModel
 import io.github.xxfast.decompose.router.RouterContext
@@ -29,5 +30,9 @@ class SettingsViewModel(
 
   fun onUpdateAddress(address: Address) {
     launch { events.emit(SettingsEvent.UpdateServer(address)) }
+  }
+
+  fun onUpdateAvatar(piece: Piece) {
+    launch { events.emit(SettingsEvent.UpdateAvatar(piece)) }
   }
 }

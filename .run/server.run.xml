@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="server" type="JetRunConfigurationType">
+  <configuration default="false" name="server" type="JetRunConfigurationType" activateToolWindowBeforeRun="false">
     <option name="MAIN_CLASS_NAME" value="io.github.xxfast.chess.ApplicationKt" />
     <module name="Chess-KMP.server.main" />
     <shortenClasspath name="NONE" />

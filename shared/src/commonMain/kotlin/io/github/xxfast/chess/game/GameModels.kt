@@ -14,6 +14,12 @@ import io.github.xxfast.chess.game.Piece.Companion.WhiteQueen
 import io.github.xxfast.chess.game.Piece.Companion.WhiteRook
 import io.github.xxfast.chess.game.PieceColor.Black
 import io.github.xxfast.chess.game.PieceColor.White
+import io.github.xxfast.chess.game.PieceType.Bishop
+import io.github.xxfast.chess.game.PieceType.King
+import io.github.xxfast.chess.game.PieceType.Knight
+import io.github.xxfast.chess.game.PieceType.Pawn
+import io.github.xxfast.chess.game.PieceType.Queen
+import io.github.xxfast.chess.game.PieceType.Rook
 import kotlinx.serialization.Serializable
 
 enum class PieceType { Pawn, Knight, Bishop, Rook, Queen, King }
@@ -26,23 +32,34 @@ operator fun PieceColor.not(): PieceColor = if (this == White) Black else White
 
 @Serializable
 data class Piece(
-  val type: PieceType,
   val color: PieceColor,
+  val type: PieceType,
 ) {
   companion object {
-    val WhitePawn = Piece(PieceType.Pawn, White)
-    val WhiteKnight = Piece(PieceType.Knight, White)
-    val WhiteBishop = Piece(PieceType.Bishop, White)
-    val WhiteRook = Piece(PieceType.Rook, White)
-    val WhiteQueen = Piece(PieceType.Queen, White)
-    val WhiteKing = Piece(PieceType.King, White)
-    val BlackPawn = Piece(PieceType.Pawn, Black)
-    val BlackKnight = Piece(PieceType.Knight, Black)
-    val BlackBishop = Piece(PieceType.Bishop, Black)
-    val BlackRook = Piece(PieceType.Rook, Black)
-    val BlackQueen = Piece(PieceType.Queen, Black)
-    val BlackKing = Piece(PieceType.King, Black)
+    val WhitePawn = Piece(White, Pawn)
+    val WhiteKnight = Piece(White, Knight)
+    val WhiteBishop = Piece(White, Bishop)
+    val WhiteRook = Piece(White, Rook)
+    val WhiteQueen = Piece(White, Queen)
+    val WhiteKing = Piece(White, King)
+    val BlackPawn = Piece(Black, Pawn)
+    val BlackKnight = Piece(Black, Knight)
+    val BlackBishop = Piece(Black, Bishop)
+    val BlackRook = Piece(Black, Rook)
+    val BlackQueen = Piece(Black, Queen)
+    val BlackKing = Piece(Black, King)
+
+    val values: List<Piece> = listOf(
+      WhitePawn, WhiteKnight, WhiteBishop, WhiteRook, WhiteQueen, WhiteKing,
+      BlackPawn, BlackKnight, BlackBishop, BlackRook, BlackQueen, BlackKing
+    )
   }
+
+  operator fun dec(): Piece = values.indexOf(this)
+    .let { if (it == 0) values.last() else values[it - 1] }
+
+  operator fun inc(): Piece = values.indexOf(this)
+    .let { if (it == values.lastIndex) values.first() else values[it + 1] }
 }
 
 typealias Board = List<List<Piece?>>

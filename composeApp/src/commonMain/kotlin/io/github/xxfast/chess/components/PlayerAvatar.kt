@@ -1,53 +1,41 @@
 package io.github.xxfast.chess.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.xxfast.chess.discovery.Player
-import io.github.xxfast.chess.resources.pieces.Pieces
-import io.github.xxfast.chess.resources.pieces.pieces.Regular
-import io.github.xxfast.chess.resources.pieces.pieces.regular.Wn
+import io.github.xxfast.chess.screens.match.icon
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun PlayerAvatar(
   player: Player,
-  icon: @Composable () -> Unit = {
+) {
+  Box(
+    modifier = Modifier
+      .padding(4.dp),
+  ) {
     Image(
-      imageVector = Pieces.Regular.Wn,
+      imageVector = player.piece.icon,
       contentDescription = null,
       modifier = Modifier
         .size(48.dp)
-    )
-  },
-) {
-  Column(
-    verticalArrangement = Arrangement.spacedBy(4.dp),
-    horizontalAlignment = Alignment.CenterHorizontally,
-  ) {
-    icon()
-
-    Text(
-      text = "${player.elo}",
-      style = MaterialTheme.typography.bodyMedium,
-      color = LocalContentColor.current,
-      fontWeight = FontWeight.ExtraBold
+        .align(Alignment.Center)
     )
   }
 }
 
 @Preview
 @Composable
-fun PreviewPlayerAvatar() {
+fun CommonPreviewPlayerAvatar() {
   PlayerAvatar(
     player = Player(
       name = "isuru",

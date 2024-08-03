@@ -1,12 +1,10 @@
-package io.github.xxfast.chess.screens.game
+package io.github.xxfast.chess.components
 
 import android.content.res.Configuration
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
-import io.github.xxfast.chess.components.GameBoard
-import io.github.xxfast.chess.components.MatchView
 import io.github.xxfast.chess.discovery.Match
 import io.github.xxfast.chess.game.Game
 import io.github.xxfast.chess.game.PieceColor
@@ -17,55 +15,6 @@ import io.github.xxfast.chess.screens.match.MatchState
 import io.github.xxfast.chess.screens.match.MatchView
 import io.github.xxfast.chess.screens.matchmake.PREVIEW_PLAYER_1
 import io.github.xxfast.chess.screens.matchmake.PREVIEW_PLAYER_2
-
-@Preview
-@Composable
-fun GameViewPreview(){
-  ChessTheme {
-    Surface {
-      MatchView(
-        state = MatchState(
-          user = PREVIEW_PLAYER_1,
-          match = Match(
-            players = mapOf(
-              PieceColor.White to PREVIEW_PLAYER_1,
-              PieceColor.Black to PREVIEW_PLAYER_2,
-            ),
-            game = Game(
-              board = Standard,
-              turn = PieceColor.White,
-              moves = legalMoves(Standard, PieceColor.White),
-              history = List(100) { "#$it" }
-            ),
-          ),
-        ),
-        onMove = {},
-        onClose = {},
-      )
-    }
-  }
-
-}
-
-@Preview
-@Composable
-fun MatchPreview() {
-  ChessTheme {
-    Surface {
-      MatchView(
-        match = Match(
-          players = mapOf(
-            PieceColor.White to PREVIEW_PLAYER_1,
-            PieceColor.Black to PREVIEW_PLAYER_2,
-          ),
-          game = Game(),
-        ),
-        onGame = {},
-      )
-    }
-  }
-}
-
 
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)

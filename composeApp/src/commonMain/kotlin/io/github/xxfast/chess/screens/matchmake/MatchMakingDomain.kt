@@ -53,7 +53,6 @@ fun ChessApplicationScope.MatchMakingDomain(events: SharedFlow<DiscoveryEvent>):
             rpcConfig {   serialization { json() } }
           }
       } catch (e: Exception) {
-        println(e)
         null
       }
 
@@ -84,5 +83,5 @@ fun ChessApplicationScope.MatchMakingDomain(events: SharedFlow<DiscoveryEvent>):
     players = discovery?.players,
     invites = discovery?.invites,
     matches = discovery?.matches,
-  ).also { println(it) }
+  )
 }

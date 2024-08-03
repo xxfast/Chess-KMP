@@ -23,6 +23,10 @@ fun ChessApplicationScope.SettingsDomain(
           user?.copy(name = event.username)
         }
 
+        is SettingsEvent.UpdateAvatar -> userStore.update { user ->
+          user?.copy(piece = event.piece)
+        }
+
         is SettingsEvent.UpdateServer -> serverStore.set(event.address)
       }
     }

@@ -73,6 +73,7 @@ kotlin {
       implementation(libs.compose.dnd)
       implementation(libs.decompose)
       implementation(libs.decompose.compose)
+      implementation(libs.kotlinx.datetime)
       implementation(libs.kotlinx.rpc.runtime.serialization.json)
       implementation(libs.kotlinx.rpc.transport.ktor.client)
       implementation(libs.kottie)

@@ -15,6 +15,7 @@ fun SettingsPreview() {
       ),
       onBack = { },
       onUpdateUsername = {  },
+      onUpdateAvatar = {  },
       onUpdateAddress = {  },
     )
   }
